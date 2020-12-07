@@ -13,14 +13,16 @@ export default class PlayerShip extends GameObject {
     offScreenCanvas.width = this.size;
     offScreenCanvas.height = this.size;
     const context = offScreenCanvas.getContext("2d");
-    context.strokeStyle = "rgb(0, 0, 0)";
+    context.fillstyle = "rgb(26, 26, 26)";
     context.lineCap = "round";
     context.lineWidth = 3;
     context.beginPath();
     context.moveTo(0, 0);
     context.lineTo(this.size, this.size / 2);
     context.lineTo(0, this.size);
-    context.stroke();
+    context.lineTo(10, this.size / 2);
+    context.closePath();
+    context.fill();
     return offScreenCanvas;
   }
   angle(cx: number, cy: number, ex: number, ey: number) {
@@ -59,7 +61,7 @@ export default class PlayerShip extends GameObject {
   }
   public draw(context: CanvasRenderingContext2D, cameraPosition: Vector2) {
     // vector debug
-    context.strokeStyle = "rgb(100, 50, 0)";
+    context.strokeStyle = "rgb(100, 100, 100)";
     context.lineCap = "round";
     context.lineWidth = 3;
     context.beginPath();
