@@ -27,7 +27,6 @@ export default class PlayerShip extends GameObject {
     const dy = ey - cy;
     const dx = ex - cx;
     let theta = Math.atan2(dy, dx);
-    // theta *= 180 / Math.PI;
     return theta;
   }
   update(dt: number, canvas: CanvasWrapper) {

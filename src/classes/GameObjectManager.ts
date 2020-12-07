@@ -1,5 +1,4 @@
 import type GameObject from "./GameObject";
-// import CursorTracker from "../services/CursorTracker";
 import CanvasWrapper from "./CanvasWrapper";
 
 export default class GameObjectManager {
@@ -9,7 +8,7 @@ export default class GameObjectManager {
   private cameraZoom: number;
   constructor(context: CanvasRenderingContext2D, cameraPosition: Vector2) {
     this.cameraPosition = cameraPosition;
-    this.cameraZoom = 0.5 * window.devicePixelRatio || 1;
+    this.cameraZoom = 0.3 * window.devicePixelRatio || 1;
     this.canvas = new CanvasWrapper(context, window.devicePixelRatio || 1);
   }
   public update(dt: number) {
