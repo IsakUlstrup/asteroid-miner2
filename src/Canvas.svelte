@@ -4,9 +4,10 @@
   let context: CanvasRenderingContext2D;
 
   function resizeCanvas(canvas: HTMLCanvasElement, devicePixelRatio: number) {
-    var rect = canvas.getBoundingClientRect();
-    canvas.width = Math.round (devicePixelRatio * rect.width);
-    canvas.height = Math.round (devicePixelRatio * rect.height);
+    const rect = canvas.getBoundingClientRect();
+    canvas.width = Math.round(devicePixelRatio * rect.width);
+    canvas.height = Math.round(devicePixelRatio * rect.height);
+    canvas.getContext("2d").scale(1 / devicePixelRatio, 1 / devicePixelRatio);
   }
 
 

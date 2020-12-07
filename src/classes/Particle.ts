@@ -3,7 +3,7 @@ import GameObject from "./GameObject";
 export default class Particle extends GameObject {
   opacity: number;
   constructor(transform: Vector2) {
-    super(transform, 16 / window.devicePixelRatio || 1);
+    super(transform, 8);
     this.opacity = 1;
   }
   render() {

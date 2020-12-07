@@ -2,20 +2,19 @@ import GameObject from "./GameObject";
 import trianglify from "trianglify";
 
 export default class Asteroid extends GameObject {
-  points: number;
   constructor(transform: Vector2) {
-    super(transform);
-    this.points = (Math.random() + 1) * 30;
-    this.size = 128 / window.devicePixelRatio || 1;
-    this.bufferCanvas = this.render();
+    super(transform, 128);
   }
   render() {
+    const offScreenCanvas = document.createElement("canvas");
+    offScreenCanvas.width = this.size;
+    offScreenCanvas.height = this.size;
     const width = this.size;
     const height = this.size;
 
     // generate a spiral using polar coordinates
     const points = [];
-    const NUM_POINTS = this.points;
+    const NUM_POINTS = (Math.random() + 1) * 30;
     // const darkenedColor = color.darken(50);
     let r = 0;
     const rStep = width / 2 / NUM_POINTS;
@@ -40,6 +39,6 @@ export default class Asteroid extends GameObject {
       yColors: "match",
       colorFunction: trianglify.colorFunctions.shadows(0.1)
     });
-    return pattern.toCanvas();
+    return pattern.toCanvas(offScreenCanvas, { scaling: false });
   }
 }

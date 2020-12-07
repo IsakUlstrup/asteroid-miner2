@@ -5,7 +5,7 @@ import Particle from "./Particle";
 export default class PlayerShip extends GameObject {
   particles: Particle[] = [];
   constructor(transform: Vector2) {
-    super(transform, 64 / window.devicePixelRatio || 1);
+    super(transform, 32);
   }
 
   protected render() {
@@ -59,13 +59,13 @@ export default class PlayerShip extends GameObject {
   }
   public draw(context: CanvasRenderingContext2D, cameraPosition: Vector2) {
     // vector debug
-    context.strokeStyle = "rgb(100, 100, 100)";
-    context.lineCap = "round";
-    context.lineWidth = 3;
-    context.beginPath();
-    context.moveTo(this.transform.x - cameraPosition.x, this.transform.y  - cameraPosition.y);
-    context.lineTo(this.vector.x * 500, this.vector.y * 500);
-    context.stroke();
+    // context.strokeStyle = "rgb(100, 100, 100)";
+    // context.lineCap = "round";
+    // context.lineWidth = 3;
+    // context.beginPath();
+    // context.moveTo(this.transform.x - cameraPosition.x, this.transform.y  - cameraPosition.y);
+    // context.lineTo(this.vector.x * 500, this.vector.y * 500);
+    // context.stroke();
 
     this.particles.forEach(p => p.draw(context, cameraPosition));
 

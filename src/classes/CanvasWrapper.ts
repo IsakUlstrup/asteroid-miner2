@@ -8,7 +8,7 @@ export default class CanasWrapper {
   resolutionScale: number;
   constructor(context: CanvasRenderingContext2D, resolutionScale: number) {
     this.context = context;
-    this.cursor = new CursorTracker(this.context.canvas, window.devicePixelRatio || 1);
+    this.cursor = new CursorTracker(this.context.canvas, resolutionScale);
     this.resolutionScale = resolutionScale;
   }
 

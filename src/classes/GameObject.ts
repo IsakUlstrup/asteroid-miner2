@@ -1,4 +1,3 @@
-import type CursorTracker from "../services/CursorTracker";
 import type CanvasWrapper from "./CanvasWrapper";
 
 export default class GameObject {
@@ -30,7 +29,7 @@ export default class GameObject {
     this.transform.y += this.vector.y * dt;
   }
   public draw(context: CanvasRenderingContext2D, cameraPosition: Vector2) {
-    context.rotate(this.rotation);
+    // context.rotate(this.rotation);
     context.drawImage(
       this.bufferCanvas,
       this.transform.x - this.size / 2 - cameraPosition.x,

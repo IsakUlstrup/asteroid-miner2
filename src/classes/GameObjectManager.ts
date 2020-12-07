@@ -26,8 +26,8 @@ export default class GameObjectManager {
   }
   public zoom(level: number) {
     this.cameraZoom += level;
-    if (this.cameraZoom < 0.5) this.cameraZoom = 0.5;
-    if (this.cameraZoom > 2) this.cameraZoom = 2;
+    if (this.cameraZoom < 0.1 * window.devicePixelRatio) this.cameraZoom = 0.1 * window.devicePixelRatio;
+    if (this.cameraZoom > 2 * window.devicePixelRatio) this.cameraZoom = window.devicePixelRatio * 2;
   }
   public addGameObject(object: GameObject) {
     this.gameObjects.push(object);
