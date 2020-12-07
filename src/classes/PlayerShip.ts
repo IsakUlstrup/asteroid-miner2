@@ -14,8 +14,6 @@ export default class PlayerShip extends GameObject {
     offScreenCanvas.height = this.size;
     const context = offScreenCanvas.getContext("2d");
     context.fillStyle = "rgb(26, 26, 26)";
-    context.lineCap = "round";
-    context.lineWidth = 3;
     context.beginPath();
     context.moveTo(0, 0);
     context.lineTo(this.size, this.size / 2);

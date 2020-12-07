@@ -6,7 +6,7 @@ export default class Asteroid extends GameObject {
   constructor(transform: Vector2) {
     super(transform);
     this.points = (Math.random() + 1) * 30;
-    this.size = 128;
+    this.size = 64;
     this.bufferCanvas = this.render();
   }
   render() {
