@@ -5,7 +5,7 @@ import Particle from "./Particle";
 export default class PlayerShip extends GameObject {
   particles: Particle[] = [];
   constructor(transform: Vector2) {
-    super(transform);
+    super(transform, 64 / window.devicePixelRatio || 1);
   }
 
   protected render() {

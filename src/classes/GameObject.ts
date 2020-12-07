@@ -9,7 +9,7 @@ export default class GameObject {
   public size: number;
   protected bufferCanvas: HTMLCanvasElement;
   constructor(transform: Vector2, size = 64) {
-    this.size = size;
+    this.size = Math.round(size);
     this.bufferCanvas = this.render();
     this.transform = transform;
     this.vector = {x: 0, y: 0};
