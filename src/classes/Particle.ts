@@ -6,6 +6,17 @@ export default class Particle extends GameObject {
     super(transform, 16);
     this.opacity = 1;
   }
+  render() {
+    const offScreenCanvas = document.createElement("canvas");
+    offScreenCanvas.width = this.size;
+    offScreenCanvas.height = this.size;
+    const context = offScreenCanvas.getContext("2d");
+    context.beginPath();
+    context.arc(this.size / 2, this.size / 2, this.size / 2, 0, 2 * Math.PI);
+    context.fillStyle = 'rgb(50, 50, 50)';
+    context.fill();
+    return offScreenCanvas;
+  }
   public update(dt: number) {
     this.opacity -= 0.001 * dt;
     if (this.opacity < 0) this.opacity = 0;

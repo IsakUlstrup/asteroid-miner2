@@ -6,9 +6,9 @@ export default class GameObjectManager {
   private gameObjects: GameObject[] = [];
   private cameraPosition: Vector2;
   private cameraZoom: number;
-  constructor(context: CanvasRenderingContext2D, cameraPosition: Vector2) {
+  constructor(context: CanvasRenderingContext2D, cameraPosition: Vector2, cameraZoom: number) {
     this.cameraPosition = cameraPosition;
-    this.cameraZoom = 0.3 * window.devicePixelRatio || 1;
+    this.cameraZoom = cameraZoom;
     this.canvas = new CanvasWrapper(context, window.devicePixelRatio || 1);
   }
   public update(dt: number) {
@@ -23,6 +23,11 @@ export default class GameObjectManager {
     this.gameObjects.forEach(object => {
       object.draw(this.canvas.context, this.cameraPosition);
     });
+  }
+  public zoom(level: number) {
+    this.cameraZoom += level;
+    if (this.cameraZoom < 0.1) this.cameraZoom = 0.1;
+    if (this.cameraZoom > 3) this.cameraZoom = 3;
   }
   public addGameObject(object: GameObject) {
     this.gameObjects.push(object);

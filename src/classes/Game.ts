@@ -1,5 +1,5 @@
 import gameLoop from "../services/GameLoop";
-import GameObject from "./GameObject";
+import Asteroid from "./Asteroid";
 import GameObjectManager from "./GameObjectManager";
 import PlayerShip from "./PlayerShip";
 
@@ -8,15 +8,22 @@ export default class Game {
   private ship: PlayerShip;
   constructor(context: CanvasRenderingContext2D){
     this.ship = new PlayerShip({x: 0, y: 0});
-    this.renderer = new GameObjectManager(context, this.ship.transform);
+    this.renderer = new GameObjectManager(context, this.ship.transform, 0.6 * window.devicePixelRatio || 1);
+
+    // scroll event handler
+    context.canvas.addEventListener('wheel',(event) => {
+      this.renderer.zoom(event.deltaY * -0.01);
+      event.preventDefault();
+    }, false);
   }
   public start() {
     // bogus gameObjects
     for (let index = 0; index < 100; index++) {
-      this.renderer.addGameObject(new GameObject({x: (Math.random() - 0.5) * 10000, y: (Math.random() - 0.5) * 10000}));
+      this.renderer.addGameObject(new Asteroid({x: (Math.random() - 0.5) * 10000, y: (Math.random() - 0.5) * 10000}))
     }
     this.renderer.addGameObject(this.ship);
 
+    // start main loop
     gameLoop.addListener((dt: number) => {
       this.mainLoop(dt);
     });
