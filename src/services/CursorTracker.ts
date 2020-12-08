@@ -23,6 +23,7 @@ export default class CursorTracker {
       "touchstart",
       (event: TouchEvent) => {
         event.preventDefault();
+        if (event.touches.length > 1) return; 
         this.position.x = event.touches[0].clientX;
         this.position.y = event.touches[0].clientY;
         this.cursorActive();
