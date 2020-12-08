@@ -88,14 +88,14 @@ export default class PinchZoom {
           // log("Pinch moving OUT -> Zoom in", ev);
           // ev.target.style.background = "pink";
           // console.log("in");
-          this.callback(curDiff);
+          this.callback(curDiff * 0.001);
         }
         if (curDiff < this.prevDiff) {
           // The distance between the two pointers has decreased
           // log("Pinch moving IN -> Zoom out",ev);
           // ev.target.style.background = "lightblue";
           // console.log("out");
-          this.callback(-curDiff);
+          this.callback(-curDiff * 0.001);
         }
       }
    
