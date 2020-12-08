@@ -13,7 +13,7 @@ export default class GameObjectManager {
     this.cameraZoom = cameraZoom;
     this.canvas = new CanvasWrapper(context, window.devicePixelRatio || 1);
     this.pinchZoom = new PinchZoom(context.canvas, (zoomModifier: number) => {
-      // console.log("callback", zoomModifier);
+      console.log(zoomModifier);
       this.zoom(zoomModifier);
     });
   }
