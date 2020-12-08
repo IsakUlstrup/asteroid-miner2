@@ -9,12 +9,6 @@ export default class Game {
   constructor(context: CanvasRenderingContext2D){
     this.ship = new PlayerShip({x: 0, y: 0});
     this.renderer = new GameObjectManager(context, this.ship.transform, 0.3 * window.devicePixelRatio || 1);
-
-    // scroll event handler
-    context.canvas.addEventListener('wheel',(event) => {
-      this.renderer.zoom(event.deltaY * -0.001);
-      event.preventDefault();
-    }, false);
   }
   public start() {
     // bogus gameObjects

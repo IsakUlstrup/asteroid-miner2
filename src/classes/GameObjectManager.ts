@@ -1,15 +1,21 @@
 import type GameObject from "./GameObject";
 import CanvasWrapper from "./CanvasWrapper";
+import PinchZoom from "../services/PinchZoom";
 
 export default class GameObjectManager {
   private canvas: CanvasWrapper;
   private gameObjects: GameObject[] = [];
   private cameraPosition: Vector2;
   private cameraZoom: number;
+  private pinchZoom: PinchZoom;
   constructor(context: CanvasRenderingContext2D, cameraPosition: Vector2, cameraZoom: number) {
     this.cameraPosition = cameraPosition;
     this.cameraZoom = cameraZoom;
     this.canvas = new CanvasWrapper(context, window.devicePixelRatio || 1);
+    this.pinchZoom = new PinchZoom(context.canvas, (zoomModifier: number) => {
+      // console.log("callback", zoomModifier);
+      this.zoom(zoomModifier);
+    });
   }
   public update(dt: number) {
     this.gameObjects.forEach(object => object.update(dt, this.canvas));

@@ -1,5 +1,4 @@
 // provides scaled canvas size, cursor tracking
-
 import CursorTracker from "../services/CursorTracker";
 
 export default class CanasWrapper {

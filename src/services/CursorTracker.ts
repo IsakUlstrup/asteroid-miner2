@@ -84,6 +84,7 @@ export default class CursorTracker {
     const rect = this.element.getBoundingClientRect();
     if (event.type === "touchmove") {
       const touch = event as TouchEvent;
+      if (touch.touches.length > 1) return;
       const x = touch.touches[0].clientX;
       const y = touch.touches[0].clientY;
 
