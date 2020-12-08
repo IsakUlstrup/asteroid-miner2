@@ -13,7 +13,7 @@ export default class Particle extends GameObject {
     const context = offScreenCanvas.getContext("2d");
     context.beginPath();
     context.arc(this.size / 2, this.size / 2, this.size / 2, 0, 2 * Math.PI);
-    context.fillStyle = 'rgb(50, 50, 50)';
+    context.fillStyle = "rgb(50, 50, 50)";
     context.fill();
     return offScreenCanvas;
   }
@@ -26,7 +26,7 @@ export default class Particle extends GameObject {
     context.drawImage(
       this.bufferCanvas,
       this.transform.x - this.size / 2 - cameraPosition.x,
-      this.transform.y  - this.size / 2 - cameraPosition.y
+      this.transform.y - this.size / 2 - cameraPosition.y
     );
     context.globalAlpha = 1;
   }

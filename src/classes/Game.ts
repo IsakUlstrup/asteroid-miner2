@@ -6,14 +6,19 @@ import PlayerShip from "./PlayerShip";
 export default class Game {
   private renderer: GameObjectManager;
   private ship: PlayerShip;
-  constructor(context: CanvasRenderingContext2D){
-    this.ship = new PlayerShip({x: 0, y: 0});
+  constructor(context: CanvasRenderingContext2D) {
+    this.ship = new PlayerShip({ x: 0, y: 0 });
     this.renderer = new GameObjectManager(context, this.ship.transform);
   }
   public start() {
     // bogus gameObjects
     for (let index = 0; index < 100; index++) {
-      this.renderer.addGameObject(new Asteroid({x: (Math.random() - 0.5) * 10000, y: (Math.random() - 0.5) * 10000}))
+      this.renderer.addGameObject(
+        new Asteroid({
+          x: (Math.random() - 0.5) * 10000,
+          y: (Math.random() - 0.5) * 10000,
+        })
+      );
     }
     this.renderer.addGameObject(this.ship);
 

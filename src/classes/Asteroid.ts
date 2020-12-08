@@ -15,7 +15,7 @@ export default class Asteroid extends GameObject {
       const context = offScreenCanvas.getContext("2d");
       context.beginPath();
       context.arc(this.size / 2, this.size / 2, this.size / 2, 0, 2 * Math.PI);
-      context.strokeStyle = 'rgb(50, 50, 50)';
+      context.strokeStyle = "rgb(50, 50, 50)";
       context.stroke();
     }
     const width = this.size;
@@ -44,9 +44,16 @@ export default class Asteroid extends GameObject {
       height,
       width,
       points,
-      xColors: [`rgb(${Math.round(Math.random() * 255)}, ${Math.round(Math.random() * 255)}, ${Math.round(Math.random() * 255)})`, `rgb(${Math.round(Math.random() * 255)}, ${Math.round(Math.random() * 255)}, ${Math.round(Math.random() * 255)})`],
+      xColors: [
+        `rgb(${Math.round(Math.random() * 255)}, ${Math.round(
+          Math.random() * 255
+        )}, ${Math.round(Math.random() * 255)})`,
+        `rgb(${Math.round(Math.random() * 255)}, ${Math.round(
+          Math.random() * 255
+        )}, ${Math.round(Math.random() * 255)})`,
+      ],
       yColors: "match",
-      colorFunction: trianglify.colorFunctions.shadows(0.1)
+      colorFunction: trianglify.colorFunctions.shadows(0.1),
     });
     return pattern.toCanvas(offScreenCanvas, { scaling: false });
   }

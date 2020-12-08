@@ -13,8 +13,8 @@ export default class GameObject {
     this.size = Math.round(size);
     this.bufferCanvas = this.render();
     this.transform = transform;
-    this.vector = {x: 0, y: 0};
-    this.acceleration = {x: 0, y: 0};
+    this.vector = { x: 0, y: 0 };
+    this.acceleration = { x: 0, y: 0 };
     this.rotation = 0;
   }
   protected render() {
@@ -26,15 +26,22 @@ export default class GameObject {
     context.fillRect(0, 0, this.size, this.size);
     return offScreenCanvas;
   }
-  public getNearbyObjects(position: Vector2, gameObjects: GameObject[], limit: number) {
-    return gameObjects.filter(go => {
+  public getNearbyObjects(
+    position: Vector2,
+    gameObjects: GameObject[],
+    limit: number
+  ) {
+    return gameObjects.filter((go) => {
       const distance = distanceBetweenPoints(position, go.transform);
       return distance < limit && go !== this;
     });
   }
   public collisionDetection(source: GameObject, objects: GameObject[]) {
-    return objects.filter(o => {
-      return distanceBetweenPoints(source.transform, o.transform) < source.size / 2 + o.size / 2 ? true : false;
+    return objects.filter((o) => {
+      return distanceBetweenPoints(source.transform, o.transform) <
+        source.size / 2 + o.size / 2
+        ? true
+        : false;
     });
   }
   public update(dt: number, canvas: CanvasWrapper, gameObjects: GameObject[]) {
@@ -46,12 +53,18 @@ export default class GameObject {
     context.drawImage(
       this.bufferCanvas,
       this.transform.x - this.size / 2 - cameraPosition.x,
-      this.transform.y  - this.size / 2 - cameraPosition.y
+      this.transform.y - this.size / 2 - cameraPosition.y
     );
     if (config.debug) {
       context.beginPath();
-      context.arc(this.transform.x - cameraPosition.x, this.transform.y - cameraPosition.y, 5, 0, 2 * Math.PI);
-      context.strokeStyle = 'rgb(250, 250, 250)';
+      context.arc(
+        this.transform.x - cameraPosition.x,
+        this.transform.y - cameraPosition.y,
+        5,
+        0,
+        2 * Math.PI
+      );
+      context.strokeStyle = "rgb(250, 250, 250)";
       context.stroke();
     }
   }

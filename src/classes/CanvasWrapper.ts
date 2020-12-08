@@ -14,7 +14,7 @@ export default class CanasWrapper {
   get size() {
     return {
       width: this.context.canvas.width * (1 / this.resolutionScale),
-      height: this.context.canvas.height * (1 / this.resolutionScale)
+      height: this.context.canvas.height * (1 / this.resolutionScale),
     };
   }
 }

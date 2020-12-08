@@ -18,15 +18,25 @@ export default class GameObjectManager {
     });
   }
   public update(dt: number) {
-    this.gameObjects.forEach(object => object.update(dt, this.canvas, this.gameObjects));
+    this.gameObjects.forEach((object) =>
+      object.update(dt, this.canvas, this.gameObjects)
+    );
   }
   public draw() {
-    this.canvas.context.setTransform(1,0,0,1,0,0);
-    this.canvas.context.clearRect(0, 0, this.canvas.context.canvas.width, this.canvas.context.canvas.height);
+    this.canvas.context.setTransform(1, 0, 0, 1, 0, 0);
+    this.canvas.context.clearRect(
+      0,
+      0,
+      this.canvas.context.canvas.width,
+      this.canvas.context.canvas.height
+    );
     this.canvas.context.scale(this.cameraZoom, this.cameraZoom);
-    this.canvas.context.translate((this.canvas.context.canvas.width / 2) / this.cameraZoom, (this.canvas.context.canvas.height / 2 ) / this.cameraZoom); 
+    this.canvas.context.translate(
+      this.canvas.context.canvas.width / 2 / this.cameraZoom,
+      this.canvas.context.canvas.height / 2 / this.cameraZoom
+    );
 
-    this.gameObjects.forEach(object => {
+    this.gameObjects.forEach((object) => {
       object.draw(this.canvas.context, this.cameraPosition);
     });
   }

@@ -23,7 +23,7 @@ export default class PlayerShip extends GameObject {
       const context = offScreenCanvas.getContext("2d");
       context.beginPath();
       context.arc(this.size / 2, this.size / 2, this.size / 2, 0, 2 * Math.PI);
-      context.strokeStyle = 'rgb(50, 50, 50)';
+      context.strokeStyle = "rgb(50, 50, 50)";
       context.stroke();
     }
     const context = offScreenCanvas.getContext("2d");
@@ -40,12 +40,19 @@ export default class PlayerShip extends GameObject {
   private handleCollision(gameObjects: GameObject[]) {
     // collision detection, only if we are moving
     if (Math.abs(this.vector.x) > 0 || Math.abs(this.vector.y) > 0) {
-      const nearby = this.getNearbyObjects(this.transform, gameObjects, this.nearbyObjectsThreshold);
+      const nearby = this.getNearbyObjects(
+        this.transform,
+        gameObjects,
+        this.nearbyObjectsThreshold
+      );
       if (nearby.length > 0) {
         const hits = this.collisionDetection(this, nearby);
         if (hits.length > 0) {
           this.hit = hits[0];
-          const distance = Math.abs(distanceBetweenPoints(this.transform, this.hit.transform) - (this.size / 2 + this.hit.size / 2));
+          const distance = Math.abs(
+            distanceBetweenPoints(this.transform, this.hit.transform) -
+              (this.size / 2 + this.hit.size / 2)
+          );
           this.vector.x = -this.vector.x / 2;
           this.vector.y = -this.vector.y / 2;
           // move ship away from object to prevent it getting stick inside
@@ -58,19 +65,30 @@ export default class PlayerShip extends GameObject {
     }
   }
   handleInput(canvas: CanvasWrapper) {
-    this.rotation = radianToPoint(canvas.size.width / 2, canvas.size.height / 2, canvas.cursor.position.x, canvas.cursor.position.y);
-  
+    this.rotation = radianToPoint(
+      canvas.size.width / 2,
+      canvas.size.height / 2,
+      canvas.cursor.position.x,
+      canvas.cursor.position.y
+    );
+
     if (canvas.cursor.active) {
-      this.acceleration.x = ((canvas.cursor.position.x / canvas.size.width) - 0.5) * this.accelerationModifier;
-      this.acceleration.y = ((canvas.cursor.position.y / canvas.size.height) - 0.5) * this.accelerationModifier;
-      this.particles.push(new Particle({x: this.transform.x, y: this.transform.y}));
+      this.acceleration.x =
+        (canvas.cursor.position.x / canvas.size.width - 0.5) *
+        this.accelerationModifier;
+      this.acceleration.y =
+        (canvas.cursor.position.y / canvas.size.height - 0.5) *
+        this.accelerationModifier;
+      this.particles.push(
+        new Particle({ x: this.transform.x, y: this.transform.y })
+      );
     } else {
       this.acceleration.x = 0;
       this.acceleration.y = 0;
     }
   }
   updateParticles(dt: number) {
-    this.particles.forEach(p => {
+    this.particles.forEach((p) => {
       p.update(dt);
     });
     this.particles = this.particles.filter(p => p.opacity > 0);
@@ -80,7 +98,12 @@ export default class PlayerShip extends GameObject {
     this.vector.y += this.acceleration.y;
 
     // if we are not accelerating and moving really slow, stop
-    if (this.acceleration.x === 0 && this.acceleration.y === 0 && Math.abs(this.vector.x) < 0.1 && Math.abs(this.vector.y) < 0.1) {
+    if (
+      this.acceleration.x === 0 &&
+      this.acceleration.y === 0 &&
+      Math.abs(this.vector.x) < 0.1 &&
+      Math.abs(this.vector.y) < 0.1
+    ) {
       this.vector.x = 0;
       this.vector.y = 0;
     }
@@ -101,15 +124,24 @@ export default class PlayerShip extends GameObject {
       context.lineCap = "round";
       context.lineWidth = 3;
       context.beginPath();
-      context.moveTo(this.transform.x - cameraPosition.x, this.transform.y  - cameraPosition.y);
+      context.moveTo(
+        this.transform.x - cameraPosition.x,
+        this.transform.y - cameraPosition.y
+      );
       context.lineTo(this.vector.x * 500, this.vector.y * 500);
       context.stroke();
 
       // collide target
       if (this.hit) {
         context.beginPath();
-        context.arc(this.hit.transform.x - cameraPosition.x, this.hit.transform.y - cameraPosition.y, this.hit.size / 2, 0, 2 * Math.PI);
-        context.strokeStyle = 'rgb(250, 50, 50)';
+        context.arc(
+          this.hit.transform.x - cameraPosition.x,
+          this.hit.transform.y - cameraPosition.y,
+          this.hit.size / 2,
+          0,
+          2 * Math.PI
+        );
+        context.strokeStyle = "rgb(250, 50, 50)";
         context.stroke();
       }
     }
@@ -120,7 +152,7 @@ export default class PlayerShip extends GameObject {
     context.drawImage(
       this.bufferCanvas,
       this.transform.x - this.size / 2 - cameraPosition.x,
-      this.transform.y  - this.size / 2 - cameraPosition.y
+      this.transform.y - this.size / 2 - cameraPosition.y
     );
   }
 }
