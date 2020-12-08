@@ -1,5 +1,6 @@
 import type CanvasWrapper from "./CanvasWrapper";
-import { distanceBetweenPoints, circlesIntersect } from "../services/Utils";
+import { distanceBetweenPoints } from "../services/Utils";
+import config from "../config";
 
 export default class GameObject {
   public transform: Vector2;
@@ -32,8 +33,8 @@ export default class GameObject {
     });
   }
   public collisionDetection(source: GameObject, objects: GameObject[]) {
-    return objects.filter(o => () => {
-      return circlesIntersect(source.transform.x, source.transform.y, source.size, o.transform.x, o.transform.y, o.size);
+    return objects.filter(o => {
+      return distanceBetweenPoints(source.transform, o.transform) < source.size / 2 + o.size / 2 ? true : false;
     });
   }
   public update(dt: number, canvas: CanvasWrapper, gameObjects: GameObject[]) {
@@ -47,5 +48,11 @@ export default class GameObject {
       this.transform.x - this.size / 2 - cameraPosition.x,
       this.transform.y  - this.size / 2 - cameraPosition.y
     );
+    if (config.debug) {
+      context.beginPath();
+      context.arc(this.transform.x - cameraPosition.x, this.transform.y - cameraPosition.y, 5, 0, 2 * Math.PI);
+      context.strokeStyle = 'rgb(250, 250, 250)';
+      context.stroke();
+    }
   }
 }

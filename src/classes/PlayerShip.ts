@@ -2,10 +2,11 @@ import GameObject from "./GameObject";
 import type CanvasWrapper from "./CanvasWrapper";
 import Particle from "./Particle";
 import config from "../config";
-import { radianToPoint } from "../services/Utils";
+import { radianToPoint, rotateVector, distanceBetweenPoints } from "../services/Utils";
 
 export default class PlayerShip extends GameObject {
   particles: Particle[] = [];
+  hit: GameObject;
   constructor(transform: Vector2) {
     super(transform, 32);
   }
@@ -33,14 +34,22 @@ export default class PlayerShip extends GameObject {
     return offScreenCanvas;
   }
   public update(dt: number, canvas: CanvasWrapper, gameObjects: GameObject[]) {
-    if (this.vector.x > 0 || this.vector.y > 0) {
-      const nearby = this.getNearbyObjects(this.transform, gameObjects, 100);
+    // collision detection, only if we are moving
+    if (Math.abs(this.vector.x) > 0 || Math.abs(this.vector.y) > 0) {
+      const nearby = this.getNearbyObjects(this.transform, gameObjects, 128);
       if (nearby.length > 0) {
         const hits = this.collisionDetection(this, nearby);
         if (hits.length > 0) {
+          this.hit = hits[0];
+          const distance = Math.abs(distanceBetweenPoints(this.transform, this.hit.transform) - (this.size / 2 + this.hit.size / 2));
           this.vector.x = -this.vector.x / 2;
           this.vector.y = -this.vector.y / 2;
+          // move ship away from object to prevent it getting stick inside
+          this.transform.x += this.vector.x * (distance + 10);
+          this.transform.y += this.vector.y * (distance + 10);
         }
+      } else {
+        this.hit = undefined;
       }
     }
 
@@ -81,6 +90,14 @@ export default class PlayerShip extends GameObject {
       context.moveTo(this.transform.x - cameraPosition.x, this.transform.y  - cameraPosition.y);
       context.lineTo(this.vector.x * 500, this.vector.y * 500);
       context.stroke();
+
+      // collide target
+      if (this.hit) {
+        context.beginPath();
+        context.arc(this.hit.transform.x - cameraPosition.x, this.hit.transform.y - cameraPosition.y, this.hit.size / 2, 0, 2 * Math.PI);
+        context.strokeStyle = 'rgb(250, 50, 50)';
+        context.stroke();
+      }
     }
 
     this.particles.forEach(p => p.draw(context, cameraPosition));

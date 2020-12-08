@@ -28,19 +28,12 @@ export function circlesIntersect(
   c2y: number,
   c2r: number
 ) {
-  const circle1 = { radius: c1r, x: c1x, y: c1y };
-  const circle2 = { radius: c2r, x: c2x, y: c2y };
-  // console.log(circle1, circle2);
-
-  const dx = circle1.x - circle2.x;
-  const dy = circle1.y - circle2.y;
-  const distance = Math.sqrt(dx * dx + dy * dy);
-
-  if (distance < circle1.radius + circle2.radius) {
+  if (distanceBetweenPoints({x: c1x, y: c1y}, {x: c2x, y: c2y}) < c1r + c2r) {
+    console.log("collide");
     return true;
-    // collision detected!
+  } else {
+    return false;
   }
-  return false;
 }
 
 export function resizeCanvas(
@@ -85,3 +78,14 @@ export function distanceBetweenPoints(p1: Vector2, p2: Vector2) {
   const b = p1.y - p2.y;
   return Math.sqrt(a * a + b * b);
 }
+
+export function rotateVector(vector: Vector2, radian: number)
+{
+  // radian = -radian;
+    const cos = Math.cos(-radian);
+    const sin = Math.sin(-radian);
+    return {
+      x: Math.round(10000*(vector.x * cos - vector.y * sin))/10000,
+      y: Math.round(10000*(vector.x * sin + vector.y * cos))/10000
+    };
+};
