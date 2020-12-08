@@ -72,3 +72,16 @@ export function getPointInCircle(radius: number) {
     y: Math.sin(angle) * radius
   };
 }
+
+export function radianToPoint(cx: number, cy: number, ex: number, ey: number) {
+  const dy = ey - cy;
+  const dx = ex - cx;
+  let theta = Math.atan2(dy, dx);
+  return theta;
+}
+
+export function distanceBetweenPoints(p1: Vector2, p2: Vector2) {
+  const a = p1.x - p2.x;
+  const b = p1.y - p2.y;
+  return Math.sqrt(a * a + b * b);
+}

@@ -1,4 +1,5 @@
 import type CanvasWrapper from "./CanvasWrapper";
+import { distanceBetweenPoints, circlesIntersect } from "../services/Utils";
 
 export default class GameObject {
   public transform: Vector2;
@@ -24,7 +25,18 @@ export default class GameObject {
     context.fillRect(0, 0, this.size, this.size);
     return offScreenCanvas;
   }
-  public update(dt: number, canvas: CanvasWrapper) {
+  public getNearbyObjects(position: Vector2, gameObjects: GameObject[], limit: number) {
+    return gameObjects.filter(go => {
+      const distance = distanceBetweenPoints(position, go.transform);
+      return distance < limit && go !== this;
+    });
+  }
+  public collisionDetection(source: GameObject, objects: GameObject[]) {
+    return objects.filter(o => () => {
+      return circlesIntersect(source.transform.x, source.transform.y, source.size, o.transform.x, o.transform.y, o.size);
+    });
+  }
+  public update(dt: number, canvas: CanvasWrapper, gameObjects: GameObject[]) {
     this.transform.x += this.vector.x * dt;
     this.transform.y += this.vector.y * dt;
   }

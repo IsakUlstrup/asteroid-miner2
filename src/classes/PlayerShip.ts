@@ -1,6 +1,8 @@
 import GameObject from "./GameObject";
 import type CanvasWrapper from "./CanvasWrapper";
 import Particle from "./Particle";
+import config from "../config";
+import { radianToPoint } from "../services/Utils";
 
 export default class PlayerShip extends GameObject {
   particles: Particle[] = [];
@@ -12,6 +14,13 @@ export default class PlayerShip extends GameObject {
     const offScreenCanvas = document.createElement("canvas");
     offScreenCanvas.width = this.size;
     offScreenCanvas.height = this.size;
+    if (config.debug) {
+      const context = offScreenCanvas.getContext("2d");
+      context.beginPath();
+      context.arc(this.size / 2, this.size / 2, this.size / 2, 0, 2 * Math.PI);
+      context.strokeStyle = 'rgb(50, 50, 50)';
+      context.stroke();
+    }
     const context = offScreenCanvas.getContext("2d");
     context.fillStyle = "rgb(26, 26, 26)";
     context.beginPath();
@@ -23,14 +32,19 @@ export default class PlayerShip extends GameObject {
     context.fill();
     return offScreenCanvas;
   }
-  angle(cx: number, cy: number, ex: number, ey: number) {
-    const dy = ey - cy;
-    const dx = ex - cx;
-    let theta = Math.atan2(dy, dx);
-    return theta;
-  }
-  update(dt: number, canvas: CanvasWrapper) {
-    this.rotation = this.angle(canvas.size.width / 2, canvas.size.height / 2, canvas.cursor.position.x, canvas.cursor.position.y);
+  public update(dt: number, canvas: CanvasWrapper, gameObjects: GameObject[]) {
+    if (this.vector.x > 0 || this.vector.y > 0) {
+      const nearby = this.getNearbyObjects(this.transform, gameObjects, 100);
+      if (nearby.length > 0) {
+        const hits = this.collisionDetection(this, nearby);
+        if (hits.length > 0) {
+          this.vector.x = -this.vector.x / 2;
+          this.vector.y = -this.vector.y / 2;
+        }
+      }
+    }
+
+    this.rotation = radianToPoint(canvas.size.width / 2, canvas.size.height / 2, canvas.cursor.position.x, canvas.cursor.position.y);
     this.particles.forEach(p => {
       p.update(dt);
     });
@@ -58,14 +72,16 @@ export default class PlayerShip extends GameObject {
     this.transform.y += this.vector.y * dt;
   }
   public draw(context: CanvasRenderingContext2D, cameraPosition: Vector2) {
-    // vector debug
-    // context.strokeStyle = "rgb(100, 100, 100)";
-    // context.lineCap = "round";
-    // context.lineWidth = 3;
-    // context.beginPath();
-    // context.moveTo(this.transform.x - cameraPosition.x, this.transform.y  - cameraPosition.y);
-    // context.lineTo(this.vector.x * 500, this.vector.y * 500);
-    // context.stroke();
+    if (config.debug) {
+      // vector debug
+      context.strokeStyle = "rgb(100, 100, 100)";
+      context.lineCap = "round";
+      context.lineWidth = 3;
+      context.beginPath();
+      context.moveTo(this.transform.x - cameraPosition.x, this.transform.y  - cameraPosition.y);
+      context.lineTo(this.vector.x * 500, this.vector.y * 500);
+      context.stroke();
+    }
 
     this.particles.forEach(p => p.draw(context, cameraPosition));
 
