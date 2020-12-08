@@ -6,7 +6,7 @@ export default class CursorTracker {
   constructor(element: HTMLElement, resolutionScale: number) {
     this.position = {
       x: 0,
-      y: 0
+      y: 0,
     };
     this.active = false;
     this.element = element;
@@ -23,7 +23,10 @@ export default class CursorTracker {
       "touchstart",
       (event: TouchEvent) => {
         event.preventDefault();
-        if (event.touches.length > 1) return; 
+        if (event.touches.length > 1) {
+          this.cursorInactive();
+          return;
+        }
         this.position.x = event.touches[0].clientX;
         this.position.y = event.touches[0].clientY;
         this.cursorActive();
@@ -85,7 +88,10 @@ export default class CursorTracker {
     const rect = this.element.getBoundingClientRect();
     if (event.type === "touchmove") {
       const touch = event as TouchEvent;
-      if (touch.touches.length > 1) return;
+      if (touch.touches.length > 1) {
+        this.cursorInactive();
+        return;
+      }
       const x = touch.touches[0].clientX;
       const y = touch.touches[0].clientY;
 
