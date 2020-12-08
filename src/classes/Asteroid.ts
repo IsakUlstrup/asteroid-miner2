@@ -1,6 +1,7 @@
 import GameObject from "./GameObject";
 import trianglify from "trianglify";
 import config from "../config";
+import { randomInt } from "../services/Utils";
 
 export default class Asteroid extends GameObject {
   constructor(transform: Vector2) {
@@ -22,7 +23,7 @@ export default class Asteroid extends GameObject {
 
     // generate a spiral using polar coordinates
     const points = [];
-    const NUM_POINTS = (Math.random() + 1) * 30;
+    const NUM_POINTS = randomInt(50, 80);
     // const darkenedColor = color.darken(50);
     let r = 0;
     const rStep = width / 2 / NUM_POINTS;

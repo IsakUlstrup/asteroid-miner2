@@ -2,13 +2,17 @@ import GameObject from "./GameObject";
 import type CanvasWrapper from "./CanvasWrapper";
 import Particle from "./Particle";
 import config from "../config";
-import { radianToPoint, rotateVector, distanceBetweenPoints } from "../services/Utils";
+import { radianToPoint, distanceBetweenPoints } from "../services/Utils";
 
 export default class PlayerShip extends GameObject {
   particles: Particle[] = [];
   hit: GameObject;
+  nearbyObjectsThreshold: number;
+  accelerationModifier: number;
   constructor(transform: Vector2) {
     super(transform, 32);
+    this.nearbyObjectsThreshold = 128;
+    this.accelerationModifier = 0.1;
   }
 
   protected render() {
@@ -36,7 +40,7 @@ export default class PlayerShip extends GameObject {
   public update(dt: number, canvas: CanvasWrapper, gameObjects: GameObject[]) {
     // collision detection, only if we are moving
     if (Math.abs(this.vector.x) > 0 || Math.abs(this.vector.y) > 0) {
-      const nearby = this.getNearbyObjects(this.transform, gameObjects, 128);
+      const nearby = this.getNearbyObjects(this.transform, gameObjects, this.nearbyObjectsThreshold);
       if (nearby.length > 0) {
         const hits = this.collisionDetection(this, nearby);
         if (hits.length > 0) {
@@ -60,8 +64,8 @@ export default class PlayerShip extends GameObject {
     this.particles = this.particles.filter(p => p.opacity > 0);
 
     if (canvas.cursor.active) {
-      this.acceleration.x = ((canvas.cursor.position.x / canvas.size.width) - 0.5) * 0.1;
-      this.acceleration.y = ((canvas.cursor.position.y / canvas.size.height) - 0.5) * 0.1;
+      this.acceleration.x = ((canvas.cursor.position.x / canvas.size.width) - 0.5) * this.accelerationModifier;
+      this.acceleration.y = ((canvas.cursor.position.y / canvas.size.height) - 0.5) * this.accelerationModifier;
       this.particles.push(new Particle({x: this.transform.x, y: this.transform.y}));
     } else {
       this.acceleration.x = 0;
