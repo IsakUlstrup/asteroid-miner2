@@ -1,3 +1,6 @@
+import config from "../config";
+
+// https://developer.mozilla.org/en-US/docs/Web/API/Pointer_events/Pinch_zoom_gestures
 export default class PinchZoom {
   evCache: PointerEvent[];
   prevDiff = -1;
@@ -10,7 +13,7 @@ export default class PinchZoom {
     // var el=document.getElementById("target");
     // scroll event handler
     element.addEventListener('wheel',(event) => {
-      this.callback(event.deltaY * -0.001);
+      this.callback(event.deltaY * -config.scrollZoomSensitivity);
       event.preventDefault();
     }, false);
 
@@ -88,14 +91,14 @@ export default class PinchZoom {
           // log("Pinch moving OUT -> Zoom in", ev);
           // ev.target.style.background = "pink";
           // console.log("in");
-          this.callback(curDiff * 0.001);
+          this.callback(curDiff * config.pinchZoomSensitivity);
         }
         if (curDiff < this.prevDiff) {
           // The distance between the two pointers has decreased
           // log("Pinch moving IN -> Zoom out",ev);
           // ev.target.style.background = "lightblue";
           // console.log("out");
-          this.callback(-curDiff * 0.001);
+          this.callback(-curDiff * config.pinchZoomSensitivity);
         }
       }
    
