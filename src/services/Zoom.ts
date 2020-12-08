@@ -1,7 +1,7 @@
 import config from "../config";
 
 // https://developer.mozilla.org/en-US/docs/Web/API/Pointer_events/Pinch_zoom_gestures
-export default class PinchZoom {
+export default class Zoom {
   evCache: PointerEvent[];
   prevDiff = -1;
   callback: Function;

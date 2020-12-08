@@ -1,20 +1,20 @@
 import type GameObject from "./GameObject";
 import CanvasWrapper from "./CanvasWrapper";
-import PinchZoom from "../services/PinchZoom";
+import Zoom from "../services/Zoom";
+import config from "../config";
 
 export default class GameObjectManager {
   private canvas: CanvasWrapper;
   private gameObjects: GameObject[] = [];
   private cameraPosition: Vector2;
   private cameraZoom: number;
-  private pinchZoom: PinchZoom;
-  constructor(context: CanvasRenderingContext2D, cameraPosition: Vector2, cameraZoom: number) {
+  private zoom: Zoom;
+  constructor(context: CanvasRenderingContext2D, cameraPosition: Vector2) {
     this.cameraPosition = cameraPosition;
-    this.cameraZoom = cameraZoom;
+    this.cameraZoom = config.defaultCameraZoom;
     this.canvas = new CanvasWrapper(context, window.devicePixelRatio || 1);
-    this.pinchZoom = new PinchZoom(context.canvas, (zoomModifier: number) => {
-      console.log(zoomModifier);
-      this.zoom(zoomModifier);
+    this.zoom = new Zoom(context.canvas, (zoomModifier: number) => {
+      this.setZoom(zoomModifier);
     });
   }
   public update(dt: number) {
@@ -30,10 +30,10 @@ export default class GameObjectManager {
       object.draw(this.canvas.context, this.cameraPosition);
     });
   }
-  public zoom(level: number) {
+  public setZoom(level: number) {
     this.cameraZoom += level;
-    if (this.cameraZoom < 0.1 * window.devicePixelRatio) this.cameraZoom = 0.1 * window.devicePixelRatio;
-    if (this.cameraZoom > 2 * window.devicePixelRatio) this.cameraZoom = window.devicePixelRatio * 2;
+    if (this.cameraZoom < 0.3 * window.devicePixelRatio) this.cameraZoom = 0.3 * window.devicePixelRatio;
+    if (this.cameraZoom > 1.5 * window.devicePixelRatio) this.cameraZoom = window.devicePixelRatio * 1.5;
   }
   public addGameObject(object: GameObject) {
     this.gameObjects.push(object);

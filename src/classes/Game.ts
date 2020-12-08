@@ -8,7 +8,7 @@ export default class Game {
   private ship: PlayerShip;
   constructor(context: CanvasRenderingContext2D){
     this.ship = new PlayerShip({x: 0, y: 0});
-    this.renderer = new GameObjectManager(context, this.ship.transform, 0.3 * window.devicePixelRatio || 1);
+    this.renderer = new GameObjectManager(context, this.ship.transform);
   }
   public start() {
     // bogus gameObjects
