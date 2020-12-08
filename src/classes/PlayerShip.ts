@@ -37,7 +37,7 @@ export default class PlayerShip extends GameObject {
     context.fill();
     return offScreenCanvas;
   }
-  public update(dt: number, canvas: CanvasWrapper, gameObjects: GameObject[]) {
+  private handleCollision(gameObjects: GameObject[]) {
     // collision detection, only if we are moving
     if (Math.abs(this.vector.x) > 0 || Math.abs(this.vector.y) > 0) {
       const nearby = this.getNearbyObjects(this.transform, gameObjects, this.nearbyObjectsThreshold);
@@ -56,13 +56,10 @@ export default class PlayerShip extends GameObject {
         this.hit = undefined;
       }
     }
-
+  }
+  handleInput(canvas: CanvasWrapper) {
     this.rotation = radianToPoint(canvas.size.width / 2, canvas.size.height / 2, canvas.cursor.position.x, canvas.cursor.position.y);
-    this.particles.forEach(p => {
-      p.update(dt);
-    });
-    this.particles = this.particles.filter(p => p.opacity > 0);
-
+  
     if (canvas.cursor.active) {
       this.acceleration.x = ((canvas.cursor.position.x / canvas.size.width) - 0.5) * this.accelerationModifier;
       this.acceleration.y = ((canvas.cursor.position.y / canvas.size.height) - 0.5) * this.accelerationModifier;
@@ -71,7 +68,14 @@ export default class PlayerShip extends GameObject {
       this.acceleration.x = 0;
       this.acceleration.y = 0;
     }
-
+  }
+  updateParticles(dt: number) {
+    this.particles.forEach(p => {
+      p.update(dt);
+    });
+    this.particles = this.particles.filter(p => p.opacity > 0);
+  }
+  move(dt: number) {
     this.vector.x += this.acceleration.x;
     this.vector.y += this.acceleration.y;
 
@@ -83,6 +87,12 @@ export default class PlayerShip extends GameObject {
 
     this.transform.x += this.vector.x * dt;
     this.transform.y += this.vector.y * dt;
+  }
+  public update(dt: number, canvas: CanvasWrapper, gameObjects: GameObject[]) {
+    this.handleCollision(gameObjects);
+    this.handleInput(canvas);
+    this.updateParticles(dt);
+    this.move(dt);
   }
   public draw(context: CanvasRenderingContext2D, cameraPosition: Vector2) {
     if (config.debug) {
