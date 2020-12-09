@@ -38,33 +38,6 @@ export default class PlayerShip extends RigidBody {
     context.fill();
     return offScreenCanvas;
   }
-  // private handleCollision(gameObjects: GameObject[]) {
-  //   // collision detection, only if we are moving
-  //   if (Math.abs(this.vector.x) > 0 || Math.abs(this.vector.y) > 0) {
-  //     const nearby = this.getNearbyObjects(
-  //       this.transform,
-  //       gameObjects,
-  //       this.nearbyObjectsThreshold
-  //     );
-  //     if (nearby.length > 0) {
-  //       const hits = this.collisionDetection(this, nearby);
-  //       if (hits.length > 0) {
-  //         this.hit = hits[0];
-  //         const distance = Math.abs(
-  //           distanceBetweenPoints(this.transform, this.hit.transform) -
-  //             (this.size / 2 + this.hit.size / 2)
-  //         );
-  //         this.vector.x = -this.vector.x / 2;
-  //         this.vector.y = -this.vector.y / 2;
-  //         // move ship away from object to prevent it getting stick inside
-  //         this.transform.x += this.vector.x * (distance + 10);
-  //         this.transform.y += this.vector.y * (distance + 10);
-  //       }
-  //     } else {
-  //       this.hit = undefined;
-  //     }
-  //   }
-  // }
   handleInput(canvas: CanvasWrapper) {
     this.rotation = radianToPoint(
       canvas.size.width / 2,
