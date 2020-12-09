@@ -6,12 +6,12 @@ export default class RigidBody extends GameObject {
   nearbyObjectsThreshold: number;
   force: Vector2;
   mass: number;
-  hit: RigidBody;
+  // hit: RigidBody;
   constructor(transform: Vector2, size: number) {
     super(transform, size);
     this.nearbyObjectsThreshold = 128;
     this.force = { x: 0, y: 0 };
-    this.hit = undefined;
+    // this.hit = undefined;
     this.mass = 1;
   }
 
@@ -54,6 +54,7 @@ export default class RigidBody extends GameObject {
       x: x * vu1 - y * u4,
       y: y * vu1 + x * u4,
     };
+
     a.vector = {
       x: x * vu3 - y * u2,
       y: y * vu3 + x * u2,
@@ -70,13 +71,8 @@ export default class RigidBody extends GameObject {
       if (nearby.length > 0) {
         const hits = this.collisionDetection(this, nearby);
         if (hits.length > 0) {
-          this.hit = hits[0];
-          this.collideMass(this, this.hit);
-        } else {
-          this.hit = undefined;
+          hits.forEach((h) => this.collideMass(this, h));
         }
-      } else {
-        this.hit = undefined;
       }
     }
   }
