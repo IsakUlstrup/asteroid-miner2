@@ -7,6 +7,7 @@ export default class GameObject {
   public vector: Vector2;
   public acceleration: Vector2;
   public rotation: number;
+  public torque: number;
   public size: number;
   protected bufferCanvas: HTMLCanvasElement;
   constructor(transform: Vector2, size = 64) {
@@ -16,6 +17,7 @@ export default class GameObject {
     this.vector = { x: 0, y: 0 };
     this.acceleration = { x: 0, y: 0 };
     this.rotation = 0;
+    this.torque = 0;
   }
   protected render() {
     const offScreenCanvas = document.createElement("canvas");
@@ -47,25 +49,43 @@ export default class GameObject {
   public update(dt: number, canvas: CanvasWrapper, gameObjects: GameObject[]) {
     this.transform.x += this.vector.x * dt;
     this.transform.y += this.vector.y * dt;
+    this.rotation += this.torque * dt;
   }
   public draw(context: CanvasRenderingContext2D, cameraPosition: Vector2) {
-    // context.rotate(this.rotation);
+    const relativePosition = {
+      x: this.transform.x - this.size / 2 - cameraPosition.x,
+      y: this.transform.y - this.size / 2 - cameraPosition.y,
+    };
+
+    context.save();
+    context.translate(
+      relativePosition.x + this.size / 2,
+      relativePosition.y + this.size / 2
+    );
+    context.rotate(this.rotation);
+    context.translate(
+      -(relativePosition.x + this.size / 2),
+      -(relativePosition.y + this.size / 2)
+    );
+
     context.drawImage(
       this.bufferCanvas,
-      this.transform.x - this.size / 2 - cameraPosition.x,
-      this.transform.y - this.size / 2 - cameraPosition.y
+      relativePosition.x,
+      relativePosition.y
     );
+
     if (config.debug) {
       context.beginPath();
       context.arc(
-        this.transform.x - cameraPosition.x,
-        this.transform.y - cameraPosition.y,
+        relativePosition.x + this.size / 2,
+        relativePosition.y + this.size / 2,
         5,
         0,
         2 * Math.PI
       );
-      context.strokeStyle = "rgb(250, 250, 250)";
+      context.strokeStyle = "rgb(250, 0, 0)";
       context.stroke();
     }
+    context.restore();
   }
 }

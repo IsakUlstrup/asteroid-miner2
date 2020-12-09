@@ -6,6 +6,7 @@ import { randomInt } from "../services/Utils";
 export default class Asteroid extends GameObject {
   constructor(transform: Vector2) {
     super(transform, 128);
+    this.torque = (Math.random() - 0.5) * 0.0005;
   }
   public render() {
     const offScreenCanvas = document.createElement("canvas");
