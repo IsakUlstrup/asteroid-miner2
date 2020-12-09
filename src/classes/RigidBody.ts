@@ -33,7 +33,7 @@ export default class RigidBody extends GameObject {
         : false;
     });
   }
-  // https://stackoverflow.com/questions/60727534/balls-bouncing-off-of-each-other
+
   collideMass(a: RigidBody, b: RigidBody) {
     const m1 = a.mass;
     const m2 = b.mass;
@@ -50,6 +50,20 @@ export default class RigidBody extends GameObject {
     const vu3 = ((m1 - m2) / mm) * u1 + ((2 * m2) / mm) * u3;
     const vu1 = ((m2 - m1) / mm) * u3 + ((2 * m1) / mm) * u1;
 
+    // resolve overlap
+    const distance = Math.sqrt(
+      (a.transform.x - b.transform.x) * (a.transform.x - b.transform.x) +
+        (a.transform.y - b.transform.y) * (a.transform.y - b.transform.y)
+    );
+    const overlap = 0.5 * (distance - a.size / 2 - b.size / 2);
+
+    a.transform.x -= (overlap * (a.transform.x - b.transform.x)) / distance;
+    a.transform.y -= (overlap * (a.transform.y - b.transform.y)) / distance;
+
+    b.transform.x += (overlap * (a.transform.x - b.transform.x)) / distance;
+    b.transform.y += (overlap * (a.transform.y - b.transform.y)) / distance;
+
+    // set new vectors
     b.vector = {
       x: x * vu1 - y * u4,
       y: y * vu1 + x * u4,
@@ -58,10 +72,6 @@ export default class RigidBody extends GameObject {
       x: x * vu3 - y * u2,
       y: y * vu3 + x * u2,
     };
-
-    // move both object slightly, to prevent them from overlapping
-    b.updateTransform(15);
-    a.updateTransform(15);
 
     const newX = a.transform.x - b.transform.x;
     const newY = a.transform.y - b.transform.y;

@@ -30,8 +30,7 @@ export default class Asteroid extends RigidBody {
 
     // generate a spiral using polar coordinates
     const points = [];
-    const NUM_POINTS = randomInt(50, 80);
-    // const darkenedColor = color.darken(50);
+    const NUM_POINTS = randomInt(50, 70);
     let r = 0;
     const rStep = width / 2 / NUM_POINTS;
     let theta = 0;
