@@ -96,6 +96,19 @@ export default class GameObject {
       context.strokeStyle = "rgb(250, 0, 0)";
       context.stroke();
     }
+    // if (config.debug) {
+    //   // vector debug
+    //   context.strokeStyle = "rgb(100, 100, 100)";
+    //   context.lineCap = "round";
+    //   context.lineWidth = 3;
+    //   context.beginPath();
+    //   context.moveTo(
+    //     relativePosition.x,
+    //     relativePosition.y
+    //   );
+    //   context.lineTo(this.vector.x * 500, this.vector.y * 500);
+    //   context.stroke();
+    // }
     context.restore();
   }
 }

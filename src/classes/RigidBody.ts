@@ -54,11 +54,16 @@ export default class RigidBody extends GameObject {
       x: x * vu1 - y * u4,
       y: y * vu1 + x * u4,
     };
-
     a.vector = {
       x: x * vu3 - y * u2,
       y: y * vu3 + x * u2,
     };
+
+    // move object away from each other, to prevent them from getting stuck
+    b.transform.x += (b.vector.x * Math.sqrt(d)) / 2;
+    b.transform.y += (b.vector.y * Math.sqrt(d)) / 2;
+    a.transform.x += (a.vector.x * Math.sqrt(d)) / 2;
+    a.transform.y += (a.vector.y * Math.sqrt(d)) / 2;
   }
   protected handleCollision(rigidBodies: RigidBody[]) {
     // collision detection, only if we are moving
@@ -77,8 +82,8 @@ export default class RigidBody extends GameObject {
     }
   }
   updateTransform(dt: number) {
-    this.vector.x += this.mass * this.force.x;
-    this.vector.y += this.mass * this.force.y;
+    this.vector.x += this.force.x;
+    this.vector.y += this.force.y;
 
     // if we are not accelerating and moving really slow, stop
     if (

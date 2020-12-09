@@ -2,18 +2,16 @@ import type GameObject from "./GameObject";
 import type CanvasWrapper from "./CanvasWrapper";
 import Particle from "./Particle";
 import config from "../config";
-import { radianToPoint, distanceBetweenPoints } from "../services/Utils";
+import { radianToPoint } from "../services/Utils";
 import RigidBody from "./RigidBody";
 
 export default class PlayerShip extends RigidBody {
   particles: Particle[] = [];
-  // hit: GameObject;
-  nearbyObjectsThreshold: number;
   accelerationModifier: number;
   constructor(transform: Vector2) {
     super(transform, 32);
-    this.nearbyObjectsThreshold = 128;
     this.accelerationModifier = 0.1;
+    this.mass = 1;
   }
 
   protected render() {
@@ -47,12 +45,18 @@ export default class PlayerShip extends RigidBody {
     );
 
     if (canvas.cursor.active) {
-      this.force.x =
-        (canvas.cursor.position.x / canvas.size.width - 0.5) *
-        this.accelerationModifier;
-      this.force.y =
-        (canvas.cursor.position.y / canvas.size.height - 0.5) *
-        this.accelerationModifier;
+      const force = {
+        x:
+          (canvas.cursor.position.x / canvas.size.width - 0.5) *
+          this.accelerationModifier,
+        y:
+          (canvas.cursor.position.y / canvas.size.height - 0.5) *
+          this.accelerationModifier,
+      };
+
+      this.force.x = force.x / this.mass;
+      this.force.y = force.y / this.mass;
+
       this.particles.push(
         new Particle({ x: this.transform.x, y: this.transform.y })
       );
@@ -65,7 +69,7 @@ export default class PlayerShip extends RigidBody {
     this.particles.forEach((p) => {
       p.update(dt);
     });
-    this.particles = this.particles.filter(p => p.opacity > 0);
+    this.particles = this.particles.filter((p) => p.opacity > 0);
   }
   public update(dt: number, canvas: CanvasWrapper, gameObjects: GameObject[]) {
     this.handleCollision(
@@ -76,35 +80,7 @@ export default class PlayerShip extends RigidBody {
     this.updateTransform(dt);
   }
   public draw(context: CanvasRenderingContext2D, cameraPosition: Vector2) {
-    if (config.debug) {
-      // vector debug
-      context.strokeStyle = "rgb(100, 100, 100)";
-      context.lineCap = "round";
-      context.lineWidth = 3;
-      context.beginPath();
-      context.moveTo(
-        this.transform.x - cameraPosition.x,
-        this.transform.y - cameraPosition.y
-      );
-      context.lineTo(this.vector.x * 500, this.vector.y * 500);
-      context.stroke();
-
-      // collide target
-      if (this.hit) {
-        context.beginPath();
-        context.arc(
-          this.hit.transform.x - cameraPosition.x,
-          this.hit.transform.y - cameraPosition.y,
-          this.hit.size / 2,
-          0,
-          2 * Math.PI
-        );
-        context.strokeStyle = "rgb(250, 50, 50)";
-        context.stroke();
-      }
-    }
-
-    this.particles.forEach(p => p.draw(context, cameraPosition));
+    this.particles.forEach((p) => p.draw(context, cameraPosition));
 
     context.rotate(this.rotation);
     context.drawImage(
