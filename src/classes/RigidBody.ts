@@ -39,7 +39,7 @@ export default class RigidBody extends GameObject {
     const m2 = b.mass;
     const x = a.transform.x - b.transform.x;
     const y = a.transform.y - b.transform.y;
-    const d = x * x + y * y;
+    const d = Math.pow(x, 2) + Math.pow(y, 2);
 
     const u1 = (a.vector.x * x + a.vector.y * y) / d;
     const u2 = (x * a.vector.y - y * a.vector.x) / d;
@@ -59,11 +59,24 @@ export default class RigidBody extends GameObject {
       y: y * vu3 + x * u2,
     };
 
-    // move object away from each other, to prevent them from getting stuck
-    b.transform.x += (b.vector.x * Math.sqrt(d)) / 2;
-    b.transform.y += (b.vector.y * Math.sqrt(d)) / 2;
-    a.transform.x += (a.vector.x * Math.sqrt(d)) / 2;
-    a.transform.y += (a.vector.y * Math.sqrt(d)) / 2;
+    // move both object slightly, to prevent them from overlapping
+    b.updateTransform(15);
+    a.updateTransform(15);
+
+    const newX = a.transform.x - b.transform.x;
+    const newY = a.transform.y - b.transform.y;
+    // const newd = Math.pow(newX, 2) + Math.pow(newY, 2);
+    const dist = Math.sqrt(Math.pow(newX, 2) + Math.pow(newY, 2));
+
+    if (dist < a.size / 2 + b.size / 2) {
+      console.log("invalid collision!");
+      console.log(
+        "dist after collision:",
+        dist,
+        "should be over:",
+        a.size / 2 + b.size / 2
+      );
+    }
   }
   protected handleCollision(rigidBodies: RigidBody[]) {
     // collision detection, only if we are moving
