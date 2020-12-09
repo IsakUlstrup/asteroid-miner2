@@ -1,12 +1,13 @@
-import GameObject from "./GameObject";
+import type GameObject from "./GameObject";
 import type CanvasWrapper from "./CanvasWrapper";
 import Particle from "./Particle";
 import config from "../config";
 import { radianToPoint, distanceBetweenPoints } from "../services/Utils";
+import RigidBody from "./RigidBody";
 
-export default class PlayerShip extends GameObject {
+export default class PlayerShip extends RigidBody {
   particles: Particle[] = [];
-  hit: GameObject;
+  // hit: GameObject;
   nearbyObjectsThreshold: number;
   accelerationModifier: number;
   constructor(transform: Vector2) {
@@ -37,33 +38,33 @@ export default class PlayerShip extends GameObject {
     context.fill();
     return offScreenCanvas;
   }
-  private handleCollision(gameObjects: GameObject[]) {
-    // collision detection, only if we are moving
-    if (Math.abs(this.vector.x) > 0 || Math.abs(this.vector.y) > 0) {
-      const nearby = this.getNearbyObjects(
-        this.transform,
-        gameObjects,
-        this.nearbyObjectsThreshold
-      );
-      if (nearby.length > 0) {
-        const hits = this.collisionDetection(this, nearby);
-        if (hits.length > 0) {
-          this.hit = hits[0];
-          const distance = Math.abs(
-            distanceBetweenPoints(this.transform, this.hit.transform) -
-              (this.size / 2 + this.hit.size / 2)
-          );
-          this.vector.x = -this.vector.x / 2;
-          this.vector.y = -this.vector.y / 2;
-          // move ship away from object to prevent it getting stick inside
-          this.transform.x += this.vector.x * (distance + 10);
-          this.transform.y += this.vector.y * (distance + 10);
-        }
-      } else {
-        this.hit = undefined;
-      }
-    }
-  }
+  // private handleCollision(gameObjects: GameObject[]) {
+  //   // collision detection, only if we are moving
+  //   if (Math.abs(this.vector.x) > 0 || Math.abs(this.vector.y) > 0) {
+  //     const nearby = this.getNearbyObjects(
+  //       this.transform,
+  //       gameObjects,
+  //       this.nearbyObjectsThreshold
+  //     );
+  //     if (nearby.length > 0) {
+  //       const hits = this.collisionDetection(this, nearby);
+  //       if (hits.length > 0) {
+  //         this.hit = hits[0];
+  //         const distance = Math.abs(
+  //           distanceBetweenPoints(this.transform, this.hit.transform) -
+  //             (this.size / 2 + this.hit.size / 2)
+  //         );
+  //         this.vector.x = -this.vector.x / 2;
+  //         this.vector.y = -this.vector.y / 2;
+  //         // move ship away from object to prevent it getting stick inside
+  //         this.transform.x += this.vector.x * (distance + 10);
+  //         this.transform.y += this.vector.y * (distance + 10);
+  //       }
+  //     } else {
+  //       this.hit = undefined;
+  //     }
+  //   }
+  // }
   handleInput(canvas: CanvasWrapper) {
     this.rotation = radianToPoint(
       canvas.size.width / 2,
@@ -73,18 +74,18 @@ export default class PlayerShip extends GameObject {
     );
 
     if (canvas.cursor.active) {
-      this.acceleration.x =
+      this.force.x =
         (canvas.cursor.position.x / canvas.size.width - 0.5) *
         this.accelerationModifier;
-      this.acceleration.y =
+      this.force.y =
         (canvas.cursor.position.y / canvas.size.height - 0.5) *
         this.accelerationModifier;
       this.particles.push(
         new Particle({ x: this.transform.x, y: this.transform.y })
       );
     } else {
-      this.acceleration.x = 0;
-      this.acceleration.y = 0;
+      this.force.x = 0;
+      this.force.y = 0;
     }
   }
   updateParticles(dt: number) {
@@ -93,29 +94,13 @@ export default class PlayerShip extends GameObject {
     });
     this.particles = this.particles.filter(p => p.opacity > 0);
   }
-  move(dt: number) {
-    this.vector.x += this.acceleration.x;
-    this.vector.y += this.acceleration.y;
-
-    // if we are not accelerating and moving really slow, stop
-    if (
-      this.acceleration.x === 0 &&
-      this.acceleration.y === 0 &&
-      Math.abs(this.vector.x) < 0.1 &&
-      Math.abs(this.vector.y) < 0.1
-    ) {
-      this.vector.x = 0;
-      this.vector.y = 0;
-    }
-
-    this.transform.x += this.vector.x * dt;
-    this.transform.y += this.vector.y * dt;
-  }
   public update(dt: number, canvas: CanvasWrapper, gameObjects: GameObject[]) {
-    this.handleCollision(gameObjects);
+    this.handleCollision(
+      gameObjects.filter((go) => go instanceof RigidBody) as RigidBody[]
+    );
     this.handleInput(canvas);
     this.updateParticles(dt);
-    this.move(dt);
+    this.updateTransform(dt);
   }
   public draw(context: CanvasRenderingContext2D, cameraPosition: Vector2) {
     if (config.debug) {

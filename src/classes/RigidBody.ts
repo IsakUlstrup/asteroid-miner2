@@ -1,12 +1,15 @@
 import GameObject from "./GameObject";
 import { distanceBetweenPoints } from "../services/Utils";
+import type CanvasWrapper from "./CanvasWrapper";
 
 export default class RigidBody extends GameObject {
   nearbyObjectsThreshold: number;
+  force: Vector2;
   hit: RigidBody;
   constructor(transform: Vector2, size: number) {
     super(transform, size);
     this.nearbyObjectsThreshold = 128;
+    this.force = { x: 0, y: 0 };
     this.hit = undefined;
   }
 
@@ -28,7 +31,7 @@ export default class RigidBody extends GameObject {
         : false;
     });
   }
-  private handleCollision(rigidBodies: RigidBody[]) {
+  protected handleCollision(rigidBodies: RigidBody[]) {
     // collision detection, only if we are moving
     if (Math.abs(this.vector.x) > 0 || Math.abs(this.vector.y) > 0) {
       const nearby = this.getNearbyBodies(
@@ -49,10 +52,38 @@ export default class RigidBody extends GameObject {
           // move ship away from object to prevent it getting stick inside
           this.transform.x += this.vector.x * (distance + 10);
           this.transform.y += this.vector.y * (distance + 10);
+        } else {
+          this.hit = undefined;
         }
       } else {
         this.hit = undefined;
       }
     }
+  }
+  updateTransform(dt: number) {
+    this.vector.x += this.force.x;
+    this.vector.y += this.force.y;
+
+    // if we are not accelerating and moving really slow, stop
+    if (
+      this.force.x === 0 &&
+      this.force.y === 0 &&
+      Math.abs(this.vector.x) < 0.1 &&
+      Math.abs(this.vector.y) < 0.1
+    ) {
+      this.vector.x = 0;
+      this.vector.y = 0;
+    }
+
+    this.transform.x += this.vector.x * dt;
+    this.transform.y += this.vector.y * dt;
+    this.rotation += this.torque * dt;
+  }
+  public update(dt: number, canvas: CanvasWrapper, gameObjects: GameObject[]) {
+    this.handleCollision(
+      gameObjects.filter((go) => go instanceof RigidBody) as RigidBody[]
+    );
+    this.handleInput(canvas);
+    this.updateTransform(dt);
   }
 }
