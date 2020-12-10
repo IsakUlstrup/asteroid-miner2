@@ -1,17 +1,18 @@
 import type GameObject from "./GameObject";
 import type CanvasWrapper from "./CanvasWrapper";
-import Particle from "./Particle";
 import config from "../config";
 import { radianToPoint } from "../services/Utils";
 import RigidBody from "./RigidBody";
+import ParticleEmitter from "./ParticleEmitter";
 
 export default class PlayerShip extends RigidBody {
-  particles: Particle[] = [];
   accelerationModifier: number;
+  engineParticleEmitter: ParticleEmitter;
   constructor(transform: Vector2) {
     super(transform, 32);
     this.accelerationModifier = 0.1;
     this.mass = 1;
+    this.engineParticleEmitter = new ParticleEmitter(this.transform);
   }
 
   protected render() {
@@ -57,30 +58,22 @@ export default class PlayerShip extends RigidBody {
       this.force.x = force.x / this.mass;
       this.force.y = force.y / this.mass;
 
-      this.particles.push(
-        new Particle({ x: this.transform.x, y: this.transform.y })
-      );
+      this.engineParticleEmitter.emit();
     } else {
       this.force.x = 0;
       this.force.y = 0;
     }
-  }
-  updateParticles(dt: number) {
-    this.particles.forEach((p) => {
-      p.update(dt);
-    });
-    this.particles = this.particles.filter((p) => p.opacity > 0);
   }
   public update(dt: number, canvas: CanvasWrapper, gameObjects: GameObject[]) {
     this.handleCollision(
       gameObjects.filter((go) => go instanceof RigidBody) as RigidBody[]
     );
     this.handleInput(canvas);
-    this.updateParticles(dt);
+    this.engineParticleEmitter.update(dt);
     this.updateTransform(dt);
   }
   public draw(context: CanvasRenderingContext2D, cameraPosition: Vector2) {
-    this.particles.forEach((p) => p.draw(context, cameraPosition));
+    this.engineParticleEmitter.draw(context, cameraPosition);
 
     context.rotate(this.rotation);
     context.drawImage(
