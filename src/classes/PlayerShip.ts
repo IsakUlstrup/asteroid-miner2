@@ -73,14 +73,15 @@ export default class PlayerShip extends RigidBody {
     this.engineParticleEmitter.update(dt);
     this.updateTransform(dt);
   }
-  public draw(context: CanvasRenderingContext2D, cameraPosition: Vector2) {
-    this.engineParticleEmitter.draw(context, cameraPosition);
+  public draw(context: CanvasRenderingContext2D) {
+    this.engineParticleEmitter.draw(context);
+    this.rotateContext(context);
 
-    context.rotate(this.rotation);
+
     context.drawImage(
       this.bufferCanvas,
-      this.transform.x - this.size / 2 - cameraPosition.x,
-      this.transform.y - this.size / 2 - cameraPosition.y
+      this.transform.x - this.size / 2,
+      this.transform.y - this.size / 2
     );
   }
 }

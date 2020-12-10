@@ -58,41 +58,27 @@ export default class GameObject {
     this.handleInput(canvas);
     this.updateTransform(dt);
   }
-  public draw(context: CanvasRenderingContext2D, cameraPosition: Vector2) {
-    const relativePosition = {
-      x: this.transform.x - this.size / 2 - cameraPosition.x,
-      y: this.transform.y - this.size / 2 - cameraPosition.y,
-    };
-
+  public rotateContext(context: CanvasRenderingContext2D) {
     // rotation
     context.save();
-    context.translate(
-      relativePosition.x + this.size / 2,
-      relativePosition.y + this.size / 2
-    );
+    context.translate(this.transform.x, this.transform.y);
     context.rotate(this.rotation);
-    context.translate(
-      -(relativePosition.x + this.size / 2),
-      -(relativePosition.y + this.size / 2)
-    );
+    context.translate(-this.transform.x, -this.transform.y);
+  }
+  public draw(context: CanvasRenderingContext2D) {
+    this.rotateContext(context);
 
     // draw buffer canvas
     context.drawImage(
       this.bufferCanvas,
-      relativePosition.x,
-      relativePosition.y
+      this.transform.x - this.size / 2,
+      this.transform.y - this.size / 2
     );
 
     // debug stuff
     if (config.debug) {
       context.beginPath();
-      context.arc(
-        relativePosition.x + this.size / 2,
-        relativePosition.y + this.size / 2,
-        5,
-        0,
-        2 * Math.PI
-      );
+      context.arc(this.transform.x, this.transform.y, 5, 0, 2 * Math.PI);
       context.strokeStyle = "rgb(250, 0, 0)";
       context.stroke();
     }

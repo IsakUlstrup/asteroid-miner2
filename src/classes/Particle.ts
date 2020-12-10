@@ -21,12 +21,12 @@ export default class Particle extends GameObject {
     this.opacity -= 0.001 * dt;
     if (this.opacity < 0) this.opacity = 0;
   }
-  public draw(context: CanvasRenderingContext2D, cameraPosition: Vector2) {
+  public draw(context: CanvasRenderingContext2D) {
     context.globalAlpha = this.opacity;
     context.drawImage(
       this.bufferCanvas,
-      this.transform.x - this.size / 2 - cameraPosition.x,
-      this.transform.y - this.size / 2 - cameraPosition.y
+      this.transform.x - this.size / 2,
+      this.transform.y - this.size / 2
     );
     context.globalAlpha = 1;
   }

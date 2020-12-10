@@ -19,9 +19,9 @@ export default class ParticleEmitter extends GameObject {
       return p.opacity > 0;
     });
   }
-  public draw(context: CanvasRenderingContext2D, cameraPosition: Vector2) {
+  public draw(context: CanvasRenderingContext2D) {
     this.particles.forEach((p) => {
-      p.draw(context, cameraPosition);
+      p.draw(context);
     });
   }
 }

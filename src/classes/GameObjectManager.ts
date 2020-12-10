@@ -23,6 +23,7 @@ export default class GameObjectManager {
     );
   }
   public draw() {
+    // reset context
     this.canvas.context.setTransform(1, 0, 0, 1, 0, 0);
     this.canvas.context.clearRect(
       0,
@@ -30,20 +31,29 @@ export default class GameObjectManager {
       this.canvas.context.canvas.width,
       this.canvas.context.canvas.height
     );
+    // zoom
     this.canvas.context.scale(this.cameraZoom, this.cameraZoom);
     this.canvas.context.translate(
       this.canvas.context.canvas.width / 2 / this.cameraZoom,
       this.canvas.context.canvas.height / 2 / this.cameraZoom
     );
 
+    // camera position
+    this.canvas.context.translate(
+      -this.cameraPosition.x,
+      -this.cameraPosition.y
+    );
+
     this.gameObjects.forEach((object) => {
-      object.draw(this.canvas.context, this.cameraPosition);
+      object.draw(this.canvas.context);
     });
   }
   public setZoom(level: number) {
     this.cameraZoom += level;
-    if (this.cameraZoom < 0.3 * window.devicePixelRatio) this.cameraZoom = 0.3 * window.devicePixelRatio;
-    if (this.cameraZoom > 1.5 * window.devicePixelRatio) this.cameraZoom = window.devicePixelRatio * 1.5;
+    if (this.cameraZoom < 0.3 * window.devicePixelRatio)
+      this.cameraZoom = 0.3 * window.devicePixelRatio;
+    if (this.cameraZoom > 1.5 * window.devicePixelRatio)
+      this.cameraZoom = window.devicePixelRatio * 1.5;
   }
   public addGameObject(object: GameObject) {
     this.gameObjects.push(object);
