@@ -13,8 +13,8 @@ export default class SpaceStation extends RigidBody {
     offScreenCanvas.height = this.size;
     const context = offScreenCanvas.getContext("2d");
 
-    context.fillStyle = "#262626";
-    context.strokeStyle = "#262626";
+    context.fillStyle = "#dd1897";
+    context.strokeStyle = "#dd1874";
     context.lineWidth = 20;
 
     context.beginPath();
@@ -39,9 +39,9 @@ export default class SpaceStation extends RigidBody {
       this.size / 2,
       this.size / 2
     );
-    gradient.addColorStop(0, "#222");
-    gradient.addColorStop(0.5, "#444");
-    gradient.addColorStop(1, "#222");
+    gradient.addColorStop(0, "#dd1874");
+    gradient.addColorStop(0.5, "#dd1897");
+    gradient.addColorStop(1, "#dd1874");
 
     context.fillStyle = gradient;
     context.beginPath();
