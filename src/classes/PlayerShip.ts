@@ -13,6 +13,8 @@ export default class PlayerShip extends RigidBody {
     this.accelerationModifier = 0.1;
     this.mass = 1;
     this.engineParticleEmitter = new ParticleEmitter(this.transform);
+    this.minSpeed = 0.1;
+    this.maxSpeed = 2;
   }
 
   protected render() {
@@ -46,6 +48,7 @@ export default class PlayerShip extends RigidBody {
     );
 
     if (canvas.cursor.active) {
+      this.engineParticleEmitter.emit();
       const force = {
         x:
           (canvas.cursor.position.x / canvas.size.width - 0.5) *
@@ -57,8 +60,6 @@ export default class PlayerShip extends RigidBody {
 
       this.force.x = force.x / this.mass;
       this.force.y = force.y / this.mass;
-
-      this.engineParticleEmitter.emit();
     } else {
       this.force.x = 0;
       this.force.y = 0;

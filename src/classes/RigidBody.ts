@@ -6,15 +6,20 @@ export default class RigidBody extends GameObject {
   nearbyObjectsThreshold: number;
   force: Vector2;
   mass: number;
-  // hit: RigidBody;
+  minSpeed: number;
+  maxSpeed: number;
   constructor(transform: Vector2, size: number) {
     super(transform, size);
     this.nearbyObjectsThreshold = 128;
     this.force = { x: 0, y: 0 };
-    // this.hit = undefined;
     this.mass = 1;
+    this.minSpeed = 0.1;
+    this.maxSpeed = 10;
   }
 
+  get speed() {
+    return Math.abs(this.vector.x) + Math.abs(this.vector.y)
+  }
   public getNearbyBodies(
     position: Vector2,
     rigidBodies: RigidBody[],
@@ -108,20 +113,27 @@ export default class RigidBody extends GameObject {
     this.vector.x += this.force.x;
     this.vector.y += this.force.y;
 
-    // if we are not accelerating and moving really slow, stop
+    // if we are not accelerating and speed is below min, stop
     if (
       this.force.x === 0 &&
       this.force.y === 0 &&
-      Math.abs(this.vector.x) < 0.1 &&
-      Math.abs(this.vector.y) < 0.1
+      Math.abs(this.vector.x) < this.minSpeed &&
+      Math.abs(this.vector.y) < this.minSpeed
     ) {
       this.vector.x = 0;
       this.vector.y = 0;
     }
 
+    // limit max speed
+    if (this.speed > this.maxSpeed) {
+      const overSpeed = this.speed - this.maxSpeed;
+      this.vector.x *= (1 - overSpeed) / 2;
+      this.vector.y *= (1 - overSpeed) / 2;
+    }
+
+    this.rotation += this.torque * dt;
     this.transform.x += this.vector.x * dt;
     this.transform.y += this.vector.y * dt;
-    this.rotation += this.torque * dt;
   }
   public update(dt: number, canvas: CanvasWrapper, gameObjects: GameObject[]) {
     this.handleCollision(

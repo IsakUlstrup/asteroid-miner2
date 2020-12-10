@@ -9,14 +9,14 @@ export default class ParticleEmitter extends GameObject {
   }
 
   public emit(transform = this.transform) {
-    this.particles.push(new Particle(transform));
+    this.particles.push(new Particle({ x: transform.x, y: transform.y }));
   }
   public update(dt: number) {
     this.particles.forEach((p) => {
       p.update(dt);
     });
     this.particles = this.particles.filter((p) => {
-      p.opacity > 0;
+      return p.opacity > 0;
     });
   }
   public draw(context: CanvasRenderingContext2D, cameraPosition: Vector2) {

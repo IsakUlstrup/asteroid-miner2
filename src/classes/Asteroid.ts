@@ -9,10 +9,11 @@ export default class Asteroid extends RigidBody {
     super(transform, 128);
     this.torque = (Math.random() - 0.5) * 0.0005;
     this.vector = {
-      x: (Math.random() - 0.5) * 0.3,
-      y: (Math.random() - 0.5) * 0.3,
+      x: (Math.random() - 0.5) * 0.1,
+      y: (Math.random() - 0.5) * 0.1,
     };
     this.mass = 4;
+    this.minSpeed = 0.01;
   }
   public render() {
     const offScreenCanvas = document.createElement("canvas");
