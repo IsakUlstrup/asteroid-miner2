@@ -3,6 +3,8 @@ import Asteroid from "./Asteroid";
 import GameObjectManager from "./GameObjectManager";
 import PlayerShip from "./PlayerShip";
 
+import SpaceStation from "./SpaceStation";
+
 export default class Game {
   private renderer: GameObjectManager;
   private ship: PlayerShip;
@@ -30,6 +32,7 @@ export default class Game {
         })
       );
     }
+    this.renderer.addGameObject(new SpaceStation({ x: 200, y: 200 }));
     this.renderer.addGameObject(this.ship);
 
     // start main loop
