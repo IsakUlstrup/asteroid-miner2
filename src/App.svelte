@@ -1,9 +1,9 @@
 <script lang="ts">
-  import Canvas from "./Canvas.svelte";
+  import Game from "./Game.svelte";
 </script>
 
 <main>
-  <Canvas />
+  <Game />
 </main>
 
 <style>
