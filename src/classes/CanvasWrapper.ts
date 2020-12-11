@@ -1,16 +1,31 @@
 // provides scaled canvas size, cursor tracking
 import CursorTracker from "../services/CursorTracker";
+import ZoomTracker from "../services/ZoomTracker";
+import config from "../config";
 
 export default class CanasWrapper {
-  context: CanvasRenderingContext2D;
-  cursor: CursorTracker;
-  resolutionScale: number;
-  constructor(context: CanvasRenderingContext2D, resolutionScale: number) {
+  public context: CanvasRenderingContext2D;
+  public cursor: CursorTracker;
+  public resolutionScale: number;
+  public cameraZoom: number;
+  public zoom: ZoomTracker;
+  constructor(context: CanvasRenderingContext2D) {
     this.context = context;
-    this.cursor = new CursorTracker(this.context.canvas, resolutionScale);
-    this.resolutionScale = resolutionScale;
+    this.resolutionScale = window.devicePixelRatio || 1;
+    this.cursor = new CursorTracker(this.context.canvas, this.resolutionScale);
+    this.cameraZoom = config.defaultCameraZoom;
+    this.zoom = new ZoomTracker(context.canvas, (zoomModifier: number) => {
+      this.setZoom(zoomModifier);
+    });
   }
 
+  public setZoom(level: number) {
+    this.cameraZoom += level * this.resolutionScale;
+    if (this.cameraZoom < 0.3 * window.devicePixelRatio)
+      this.cameraZoom = 0.3 * window.devicePixelRatio;
+    if (this.cameraZoom > 1.5 * window.devicePixelRatio)
+      this.cameraZoom = window.devicePixelRatio * 1.5;
+  }
   get size() {
     return {
       width: this.context.canvas.width * (1 / this.resolutionScale),

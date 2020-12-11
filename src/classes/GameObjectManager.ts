@@ -1,22 +1,15 @@
 import type GameObject from "./GameObject";
 import CanvasWrapper from "./CanvasWrapper";
-import Zoom from "../services/Zoom";
-import config from "../config";
 
 export default class GameObjectManager {
   private canvas: CanvasWrapper;
   private gameObjects: GameObject[] = [];
   private cameraPosition: Vector2;
-  private cameraZoom: number;
-  private zoom: Zoom;
   constructor(context: CanvasRenderingContext2D, cameraPosition: Vector2) {
     this.cameraPosition = cameraPosition;
-    this.cameraZoom = config.defaultCameraZoom;
-    this.canvas = new CanvasWrapper(context, window.devicePixelRatio || 1);
-    this.zoom = new Zoom(context.canvas, (zoomModifier: number) => {
-      this.setZoom(zoomModifier);
-    });
+    this.canvas = new CanvasWrapper(context);
   }
+
   public update(dt: number) {
     this.gameObjects.forEach((object) =>
       object.update(dt, this.canvas, this.gameObjects)
@@ -32,28 +25,20 @@ export default class GameObjectManager {
       this.canvas.context.canvas.height
     );
     // zoom
-    this.canvas.context.scale(this.cameraZoom, this.cameraZoom);
-    this.canvas.context.translate(
-      this.canvas.context.canvas.width / 2 / this.cameraZoom,
-      this.canvas.context.canvas.height / 2 / this.cameraZoom
-    );
+    this.canvas.context.scale(this.canvas.cameraZoom, this.canvas.cameraZoom);
 
     // camera position
     this.canvas.context.translate(
-      -this.cameraPosition.x,
-      -this.cameraPosition.y
+      this.canvas.context.canvas.width / 2 / this.canvas.cameraZoom -
+        this.cameraPosition.x,
+      this.canvas.context.canvas.height / 2 / this.canvas.cameraZoom -
+        this.cameraPosition.y
     );
 
+    // draw gameObjects
     this.gameObjects.forEach((object) => {
       object.draw(this.canvas.context);
     });
-  }
-  public setZoom(level: number) {
-    this.cameraZoom += level;
-    if (this.cameraZoom < 0.3 * window.devicePixelRatio)
-      this.cameraZoom = 0.3 * window.devicePixelRatio;
-    if (this.cameraZoom > 1.5 * window.devicePixelRatio)
-      this.cameraZoom = window.devicePixelRatio * 1.5;
   }
   public addGameObject(object: GameObject) {
     this.gameObjects.push(object);
