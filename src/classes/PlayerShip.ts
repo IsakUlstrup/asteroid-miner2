@@ -14,7 +14,7 @@ export default class PlayerShip extends RigidBody {
     this.mass = 1;
     this.engineParticleEmitter = new ParticleEmitter(this.transform);
     this.minSpeed = 0.1;
-    this.maxSpeed = 2;
+    this.maxSpeed = 10;
   }
 
   protected render() {

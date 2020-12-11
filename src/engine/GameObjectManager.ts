@@ -42,7 +42,7 @@ export default class GameObjectManager {
     );
 
     // parallax objects
-    this.parallaxObjects.forEach((object) => {
+    this.onScreenParallaxObjects.forEach((object) => {
       object.draw(this.canvas.context);
     });
 
@@ -105,6 +105,16 @@ export default class GameObjectManager {
       config.drawDistanceModifier *
       (1 / this.canvas.cameraZoom)
     );
+  }
+  get onScreenParallaxObjects() {
+    return this.parallaxObjects.filter((o) => {
+      if (
+        distanceBetweenPoints(this.cameraPosition, o.transform) <
+        this.drawDistance * (1 + this.parallaxAmount) + o.radius
+      ) {
+        return o;
+      }
+    });
   }
   get onScreenObjects() {
     return this.updateObjects.filter((o) => {
