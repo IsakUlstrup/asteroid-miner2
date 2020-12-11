@@ -7,10 +7,13 @@ export default class GameObjectManager {
   private canvas: CanvasWrapper;
   public gameObjects: GameObject[] = [];
   public parallaxObjects: GameObject[] = [];
+  private parallaxAmount: number;
   private cameraPosition: Vector2;
   constructor(context: CanvasRenderingContext2D, cameraPosition: Vector2) {
     this.cameraPosition = cameraPosition;
     this.canvas = new CanvasWrapper(context);
+    // 0 background, 1 foreground
+    this.parallaxAmount = 0.6;
   }
 
   public update(dt: number) {
@@ -32,8 +35,10 @@ export default class GameObjectManager {
 
     // camera position for parallax objects
     this.canvas.context.translate(
-      this.canvas.context.canvas.width / 2 / this.canvas.cameraZoom - (this.cameraPosition.x * 0.5),
-      this.canvas.context.canvas.height / 2 / this.canvas.cameraZoom - (this.cameraPosition.y * 0.5)
+      this.canvas.context.canvas.width / 2 / this.canvas.cameraZoom -
+        this.cameraPosition.x * this.parallaxAmount,
+      this.canvas.context.canvas.height / 2 / this.canvas.cameraZoom -
+        this.cameraPosition.y * this.parallaxAmount
     );
 
     // parallax objects
@@ -43,8 +48,8 @@ export default class GameObjectManager {
 
     // camera position for normal objects
     this.canvas.context.translate(
-      -(this.cameraPosition.x * 0.5),
-      -(this.cameraPosition.y * 0.5)
+      -(this.cameraPosition.x * (1 - this.parallaxAmount)),
+      -(this.cameraPosition.y * (1 - this.parallaxAmount))
     );
 
     // draw gameObjects
