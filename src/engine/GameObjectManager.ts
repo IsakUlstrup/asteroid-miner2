@@ -88,7 +88,7 @@ export default class GameObjectManager {
     return this.gameObjects.filter((o) => {
       if (
         distanceBetweenPoints(this.cameraPosition, o.transform) <
-        this.drawDistance
+        this.drawDistance + o.radius
       ) {
         return o;
       }

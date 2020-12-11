@@ -13,7 +13,7 @@ export default class Particle extends GameObject {
     const context = offScreenCanvas.getContext("2d");
     context.beginPath();
     context.arc(this.size / 2, this.size / 2, this.size / 2, 0, 2 * Math.PI);
-    context.fillStyle = "rgb(50, 50, 50)";
+    context.fillStyle = "magenta";
     context.fill();
     return offScreenCanvas;
   }

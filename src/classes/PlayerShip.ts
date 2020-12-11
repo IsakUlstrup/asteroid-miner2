@@ -29,7 +29,7 @@ export default class PlayerShip extends RigidBody {
       context.stroke();
     }
     const context = offScreenCanvas.getContext("2d");
-    context.fillStyle = "rgb(26, 26, 26)";
+    context.fillStyle = "rgb(255, 255, 255)";
     context.beginPath();
     context.moveTo(0, 0);
     context.lineTo(this.size, this.size / 2);

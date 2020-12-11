@@ -9,6 +9,9 @@
 </script>
 
 <style>
+  canvas {
+    background: url("https://www.toptal.com/designers/subtlepatterns/patterns/broken_noise.png");
+  }
 </style>
 
 <canvas width="800" height="400" id="game-canvas" alt="game canvas">
