@@ -37,18 +37,16 @@ export default class GameObjectManager {
         this.cameraPosition.y
     );
 
-    // draw gameObjects
-    console.log(
-      "onscreen objects:",
-      this.onScreenObjects.length,
-      "/",
-      this.gameObjects.length
-    );
-    this.onScreenObjects.forEach((object) => {
-      object.draw(this.canvas.context);
-    });
-
     if (config.debug) {
+      console.log(
+        "onscreen objects:",
+        this.onScreenObjects.length,
+        "/",
+        this.gameObjects.length
+      );
+      this.onScreenObjects.forEach((object) => {
+        object.draw(this.canvas.context);
+      });
       // draw distance
       const context = this.canvas.context;
       context.beginPath();
