@@ -94,4 +94,7 @@ export default class GameObjectManager {
       }
     });
   }
+  get objects() {
+    return this.gameObjects;
+  }
 }

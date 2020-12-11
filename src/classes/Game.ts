@@ -1,14 +1,13 @@
-import config from "../config";
 import gameLoop from "../services/GameLoop";
-import Asteroid from "./Asteroid";
 import GameObjectManager from "../engine/GameObjectManager";
 import PlayerShip from "./PlayerShip";
-
+import WorldGeneration from "./WordGeneration";
 import SpaceStation from "./SpaceStation";
 
 export default class Game {
   private renderer: GameObjectManager;
   private ship: PlayerShip;
+  private worldGen: WorldGeneration;
   constructor(canvasQuery: string) {
     this.ship = new PlayerShip({ x: 0, y: 0 });
 
@@ -22,17 +21,10 @@ export default class Game {
     const context = canvas.getContext("2d");
 
     this.renderer = new GameObjectManager(context, this.ship.transform);
+    this.worldGen = new WorldGeneration(this.ship.transform, this.renderer);
   }
   public start() {
-    // bogus gameObjects
-    for (let index = 0; index < config.maxAsteroidCount; index++) {
-      this.renderer.addGameObject(
-        new Asteroid({
-          x: (Math.random() - 0.5) * 10000,
-          y: (Math.random() - 0.5) * 10000,
-        })
-      );
-    }
+    this.renderer.addGameObject(this.worldGen);
     this.renderer.addGameObject(new SpaceStation({ x: 200, y: 200 }));
     this.renderer.addGameObject(this.ship);
 
