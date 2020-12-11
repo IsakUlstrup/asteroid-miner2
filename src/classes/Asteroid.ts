@@ -7,10 +7,10 @@ import RigidBody from "../engine/RigidBody";
 export default class Asteroid extends RigidBody {
   constructor(transform: Vector2) {
     super(transform, 128);
-    this.torque = (Math.random() - 0.5) * 0.0005;
+    this.torque = (Math.random() - 0.5) * 0.0002;
     this.vector = {
-      x: (Math.random() - 0.5) * 0.1,
-      y: (Math.random() - 0.5) * 0.1,
+      x: 0,
+      y: 0,
     };
     this.mass = 4;
     this.minSpeed = 0.01;

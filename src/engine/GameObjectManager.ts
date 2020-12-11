@@ -13,7 +13,7 @@ export default class GameObjectManager {
   }
 
   public update(dt: number) {
-    this.gameObjects.forEach((object) =>
+    this.updateObjects.forEach((object) =>
       object.update(dt, this.canvas, this.gameObjects)
     );
   }
@@ -47,6 +47,10 @@ export default class GameObjectManager {
       console.log(
         "onscreen objects:",
         this.onScreenObjects.length,
+        "/",
+        this.gameObjects.length,
+        "\nUpdated objects:",
+        this.updateObjects.length,
         "/",
         this.gameObjects.length
       );
@@ -89,6 +93,16 @@ export default class GameObjectManager {
       if (
         distanceBetweenPoints(this.cameraPosition, o.transform) <
         this.drawDistance + o.radius
+      ) {
+        return o;
+      }
+    });
+  }
+  get updateObjects() {
+    return this.gameObjects.filter((o) => {
+      if (
+        distanceBetweenPoints(this.cameraPosition, o.transform) <
+        config.updateDistance * (1 / this.canvas.cameraZoom)
       ) {
         return o;
       }

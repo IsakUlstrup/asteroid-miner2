@@ -71,7 +71,7 @@ export default class GameObject {
     context.stroke();
 
     // vector
-    context.strokeStyle = "rgb(100, 100, 100)";
+    context.strokeStyle = "white";
     context.lineCap = "round";
     context.lineWidth = 3;
     context.beginPath();
@@ -92,7 +92,7 @@ export default class GameObject {
       0,
       2 * Math.PI
     );
-    context.strokeStyle = "blue";
+    context.strokeStyle = "white";
     context.stroke();
   }
   public draw(context: CanvasRenderingContext2D) {
@@ -109,5 +109,10 @@ export default class GameObject {
   }
   get radius() {
     return this.size / 2;
+  }
+  get isMoving() {
+    return Math.abs(this.vector.x) > 0 || Math.abs(this.vector.y) > 0
+      ? true
+      : false;
   }
 }

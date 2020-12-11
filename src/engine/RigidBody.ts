@@ -136,9 +136,10 @@ export default class RigidBody extends GameObject {
     this.transform.y += this.vector.y * dt;
   }
   public update(dt: number, canvas: CanvasWrapper, gameObjects: GameObject[]) {
-    this.handleCollision(
-      gameObjects.filter((go) => go instanceof RigidBody) as RigidBody[]
-    );
+    if (this.isMoving)
+      this.handleCollision(
+        gameObjects.filter((go) => go instanceof RigidBody) as RigidBody[]
+      );
     this.handleInput(canvas);
     this.updateTransform(dt);
   }
