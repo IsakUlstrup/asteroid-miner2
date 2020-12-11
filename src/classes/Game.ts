@@ -1,7 +1,7 @@
 import config from "../config";
 import gameLoop from "../services/GameLoop";
 import Asteroid from "./Asteroid";
-import GameObjectManager from "./GameObjectManager";
+import GameObjectManager from "../engine/GameObjectManager";
 import PlayerShip from "./PlayerShip";
 
 import SpaceStation from "./SpaceStation";

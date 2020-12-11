@@ -1,4 +1,4 @@
-import RigidBody from "./RigidBody";
+import RigidBody from "../engine/RigidBody";
 
 export default class SpaceStation extends RigidBody {
   constructor(transform: Vector2) {

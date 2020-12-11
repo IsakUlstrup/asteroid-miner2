@@ -2,7 +2,7 @@
 import trianglify from "trianglify";
 import config from "../config";
 import { randomInt } from "../services/Utils";
-import RigidBody from "./RigidBody";
+import RigidBody from "../engine/RigidBody";
 
 export default class Asteroid extends RigidBody {
   constructor(transform: Vector2) {

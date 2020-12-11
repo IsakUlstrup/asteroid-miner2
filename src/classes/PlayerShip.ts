@@ -1,9 +1,9 @@
-import type GameObject from "./GameObject";
-import type CanvasWrapper from "./CanvasWrapper";
+import type GameObject from "../engine/GameObject";
+import type CanvasWrapper from "../engine/CanvasWrapper";
 import config from "../config";
 import { radianToPoint } from "../services/Utils";
-import RigidBody from "./RigidBody";
-import ParticleEmitter from "./ParticleEmitter";
+import RigidBody from "../engine/RigidBody";
+import ParticleEmitter from "../engine/ParticleEmitter";
 
 export default class PlayerShip extends RigidBody {
   accelerationModifier: number;
