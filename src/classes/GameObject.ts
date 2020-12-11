@@ -5,7 +5,6 @@ import config from "../config";
 export default class GameObject {
   public transform: Vector2;
   public vector: Vector2;
-  // public acceleration: Vector2;
   public rotation: number;
   public torque: number;
   public size: number;
@@ -15,7 +14,6 @@ export default class GameObject {
     this.bufferCanvas = this.render();
     this.transform = transform;
     this.vector = { x: 0, y: 0 };
-    // this.acceleration = { x: 0, y: 0 };
     this.rotation = 0;
     this.torque = 0;
   }
@@ -58,15 +56,47 @@ export default class GameObject {
     this.handleInput(canvas);
     this.updateTransform(dt);
   }
-  public rotateContext(context: CanvasRenderingContext2D) {
+  public rotateContext(context: CanvasRenderingContext2D, radian: number) {
     // rotation
     context.save();
     context.translate(this.transform.x, this.transform.y);
-    context.rotate(this.rotation);
+    context.rotate(radian);
     context.translate(-this.transform.x, -this.transform.y);
   }
+  public drawDebug(context: CanvasRenderingContext2D) {
+    // object center
+    context.beginPath();
+    context.arc(this.transform.x, this.transform.y, 3, 0, 2 * Math.PI);
+    context.strokeStyle = "rgb(250, 0, 0)";
+    context.stroke();
+
+    // vector
+    context.strokeStyle = "rgb(100, 100, 100)";
+    context.lineCap = "round";
+    context.lineWidth = 3;
+    context.beginPath();
+    context.moveTo(this.transform.x, this.transform.y);
+    context.lineTo(
+      this.transform.x + this.vector.x * 500,
+      this.transform.y + this.vector.y * 500
+    );
+    context.stroke();
+
+    // size
+    context.lineWidth = 1;
+    context.beginPath();
+    context.arc(
+      this.transform.x,
+      this.transform.y,
+      this.radius,
+      0,
+      2 * Math.PI
+    );
+    context.strokeStyle = "blue";
+    context.stroke();
+  }
   public draw(context: CanvasRenderingContext2D) {
-    this.rotateContext(context);
+    this.rotateContext(context, this.rotation);
 
     // draw buffer canvas
     context.drawImage(
@@ -74,27 +104,10 @@ export default class GameObject {
       this.transform.x - this.size / 2,
       this.transform.y - this.size / 2
     );
-
-    // debug stuff
-    if (config.debug) {
-      context.beginPath();
-      context.arc(this.transform.x, this.transform.y, 5, 0, 2 * Math.PI);
-      context.strokeStyle = "rgb(250, 0, 0)";
-      context.stroke();
-    }
-    // if (config.debug) {
-    //   // vector debug
-    //   context.strokeStyle = "rgb(100, 100, 100)";
-    //   context.lineCap = "round";
-    //   context.lineWidth = 3;
-    //   context.beginPath();
-    //   context.moveTo(
-    //     relativePosition.x,
-    //     relativePosition.y
-    //   );
-    //   context.lineTo(this.vector.x * 500, this.vector.y * 500);
-    //   context.stroke();
-    // }
     context.restore();
+    if (config.debug) this.drawDebug(context);
+  }
+  get radius() {
+    return this.size / 2;
   }
 }
