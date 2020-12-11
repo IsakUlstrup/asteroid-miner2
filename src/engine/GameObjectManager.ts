@@ -5,7 +5,8 @@ import { distanceBetweenPoints } from "../services/Utils";
 
 export default class GameObjectManager {
   private canvas: CanvasWrapper;
-  private gameObjects: GameObject[] = [];
+  public gameObjects: GameObject[] = [];
+  public parallaxObjects: GameObject[] = [];
   private cameraPosition: Vector2;
   constructor(context: CanvasRenderingContext2D, cameraPosition: Vector2) {
     this.cameraPosition = cameraPosition;
@@ -29,12 +30,21 @@ export default class GameObjectManager {
     // zoom
     this.canvas.context.scale(this.canvas.cameraZoom, this.canvas.cameraZoom);
 
-    // camera position
+    // camera position for parallax objects
     this.canvas.context.translate(
-      this.canvas.context.canvas.width / 2 / this.canvas.cameraZoom -
-        this.cameraPosition.x,
-      this.canvas.context.canvas.height / 2 / this.canvas.cameraZoom -
-        this.cameraPosition.y
+      this.canvas.context.canvas.width / 2 / this.canvas.cameraZoom - (this.cameraPosition.x * 0.5),
+      this.canvas.context.canvas.height / 2 / this.canvas.cameraZoom - (this.cameraPosition.y * 0.5)
+    );
+
+    // parallax objects
+    this.parallaxObjects.forEach((object) => {
+      object.draw(this.canvas.context);
+    });
+
+    // camera position for normal objects
+    this.canvas.context.translate(
+      -(this.cameraPosition.x * 0.5),
+      -(this.cameraPosition.y * 0.5)
     );
 
     // draw gameObjects
@@ -71,6 +81,9 @@ export default class GameObjectManager {
   }
   public addGameObject(object: GameObject) {
     this.gameObjects.push(object);
+  }
+  public addParallaxObject(object: GameObject) {
+    this.parallaxObjects.push(object);
   }
   public removeGameObject(object: GameObject) {
     const index = this.gameObjects.indexOf(object);

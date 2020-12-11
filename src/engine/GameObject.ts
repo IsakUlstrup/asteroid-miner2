@@ -22,7 +22,7 @@ export default class GameObject {
     offScreenCanvas.width = this.size;
     offScreenCanvas.height = this.size;
     const context = offScreenCanvas.getContext("2d");
-    context.fillStyle = "rgb(50, 50, 50)";
+    context.fillStyle = "white";
     context.fillRect(0, 0, this.size, this.size);
     return offScreenCanvas;
   }
