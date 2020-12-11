@@ -1,5 +1,7 @@
 import type GameObject from "./GameObject";
 import CanvasWrapper from "./CanvasWrapper";
+import config from "../config";
+import { distanceBetweenPoints } from "../services/Utils";
 
 export default class GameObjectManager {
   private canvas: CanvasWrapper;
@@ -36,15 +38,58 @@ export default class GameObjectManager {
     );
 
     // draw gameObjects
-    this.gameObjects.forEach((object) => {
+    console.log(
+      "onscreen objects:",
+      this.onScreenObjects.length,
+      "/",
+      this.gameObjects.length
+    );
+    this.onScreenObjects.forEach((object) => {
       object.draw(this.canvas.context);
     });
+
+    if (config.debug) {
+      // draw distance
+      const context = this.canvas.context;
+      context.beginPath();
+      context.arc(
+        this.cameraPosition.x,
+        this.cameraPosition.y,
+        this.drawDistance,
+        0,
+        2 * Math.PI
+      );
+      context.strokeStyle = "rgb(250, 0, 0)";
+      context.stroke();
+    }
   }
   public addGameObject(object: GameObject) {
     this.gameObjects.push(object);
   }
   public removeGameObject(object: GameObject) {
-    const index = this.gameObjects.indexOf(object)
+    const index = this.gameObjects.indexOf(object);
     if (index) this.gameObjects.splice(index, 1);
+  }
+  get drawDistance() {
+    const center = {
+      x: this.canvas.context.canvas.width / 2,
+      y: this.canvas.context.canvas.height / 2,
+    };
+
+    return (
+      distanceBetweenPoints({ x: 0, y: 0 }, center) *
+      config.drawDistanceModifier *
+      (1 / this.canvas.cameraZoom)
+    );
+  }
+  get onScreenObjects() {
+    return this.gameObjects.filter((o) => {
+      if (
+        distanceBetweenPoints(this.cameraPosition, o.transform) <
+        this.drawDistance
+      ) {
+        return o;
+      }
+    });
   }
 }

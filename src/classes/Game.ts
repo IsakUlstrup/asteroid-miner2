@@ -1,3 +1,4 @@
+import config from "../config";
 import gameLoop from "../services/GameLoop";
 import Asteroid from "./Asteroid";
 import GameObjectManager from "./GameObjectManager";
@@ -24,7 +25,7 @@ export default class Game {
   }
   public start() {
     // bogus gameObjects
-    for (let index = 0; index < 100; index++) {
+    for (let index = 0; index < config.maxAsteroidCount; index++) {
       this.renderer.addGameObject(
         new Asteroid({
           x: (Math.random() - 0.5) * 10000,
