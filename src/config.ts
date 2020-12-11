@@ -3,7 +3,7 @@ export default {
   defaultCameraZoom: 1,
   pinchZoomSensitivity: 0.0001,
   scrollZoomSensitivity: 0.001,
-  maxAsteroidCount: 500,
+  maxAsteroidCount: 1000,
   drawDistanceModifier: 1,
   updateDistance: 5000,
 };

@@ -36,14 +36,6 @@ export default class GameObject {
       return distance < limit && go !== this;
     });
   }
-  public collisionDetection(source: GameObject, objects: GameObject[]) {
-    return objects.filter((o) => {
-      return distanceBetweenPoints(source.transform, o.transform) <
-        source.size / 2 + o.size / 2
-        ? true
-        : false;
-    });
-  }
   handleInput(canvas: CanvasWrapper) {
     return;
   }
@@ -101,8 +93,8 @@ export default class GameObject {
     // draw buffer canvas
     context.drawImage(
       this.bufferCanvas,
-      this.transform.x - this.size / 2,
-      this.transform.y - this.size / 2
+      Math.round(this.transform.x - this.size / 2),
+      Math.round(this.transform.y - this.size / 2)
     );
     context.restore();
     if (config.debug) this.drawDebug(context);

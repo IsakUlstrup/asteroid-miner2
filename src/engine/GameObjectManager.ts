@@ -89,7 +89,7 @@ export default class GameObjectManager {
     );
   }
   get onScreenObjects() {
-    return this.gameObjects.filter((o) => {
+    return this.updateObjects.filter((o) => {
       if (
         distanceBetweenPoints(this.cameraPosition, o.transform) <
         this.drawDistance + o.radius
