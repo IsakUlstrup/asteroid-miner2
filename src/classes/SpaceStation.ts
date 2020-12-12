@@ -13,10 +13,11 @@ export default class SpaceStation extends RigidBody {
     offScreenCanvas.height = this.size;
     const context = offScreenCanvas.getContext("2d");
 
-    context.fillStyle = "#dd1897";
-    context.strokeStyle = "#dd1874";
+    context.fillStyle = "#eee";
+    context.strokeStyle = "white";
     context.lineWidth = 20;
 
+    // cross beams
     context.beginPath();
     context.moveTo(this.size / 2, 10);
     context.lineTo(this.size / 2, this.size - 10);
@@ -27,6 +28,8 @@ export default class SpaceStation extends RigidBody {
     context.lineTo(this.size - 10, this.size / 2);
     context.stroke();
 
+    // center hub
+    context.beginPath();
     context.arc(this.size / 2, this.size / 2, 30, 0, Math.PI * 2);
     context.fill();
 
@@ -39,10 +42,12 @@ export default class SpaceStation extends RigidBody {
       this.size / 2,
       this.size / 2
     );
-    gradient.addColorStop(0, "#dd1874");
-    gradient.addColorStop(0.5, "#dd1897");
-    gradient.addColorStop(1, "#dd1874");
+    gradient.addColorStop(0, "#bbb");
+    gradient.addColorStop(0.4, "#fafafa");
+    gradient.addColorStop(0.6, "#fafafa");
+    gradient.addColorStop(1, "#bbb");
 
+    // main body/donut
     context.fillStyle = gradient;
     context.beginPath();
     context.arc(
@@ -61,6 +66,12 @@ export default class SpaceStation extends RigidBody {
       Math.PI * 2,
       true
     );
+    context.fill();
+
+    // windows
+    context.beginPath();
+    context.fillStyle = "navy";
+    context.arc(50, 50, 10, 0, Math.PI * 2);
     context.fill();
 
     return offScreenCanvas;

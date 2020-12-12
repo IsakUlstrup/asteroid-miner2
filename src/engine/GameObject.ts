@@ -17,6 +17,18 @@ export default class GameObject {
     this.rotation = 0;
     this.torque = 0;
   }
+
+  // GETTERS
+  get radius() {
+    return this.size / 2;
+  }
+  get isMoving() {
+    return Math.abs(this.vector.x) > 0 || Math.abs(this.vector.y) > 0
+      ? true
+      : false;
+  }
+
+  // METHODS
   protected render() {
     const offScreenCanvas = document.createElement("canvas");
     offScreenCanvas.width = this.size;
@@ -98,13 +110,5 @@ export default class GameObject {
     );
     context.restore();
     if (config.debug) this.drawDebug(context);
-  }
-  get radius() {
-    return this.size / 2;
-  }
-  get isMoving() {
-    return Math.abs(this.vector.x) > 0 || Math.abs(this.vector.y) > 0
-      ? true
-      : false;
   }
 }

@@ -19,9 +19,12 @@ export default class RigidBody extends GameObject {
     this.collisionRadius = this.radius;
   }
 
+  // GETTERS
   get speed() {
     return Math.abs(this.vector.x) + Math.abs(this.vector.y)
   }
+
+  // METHODS
   public getNearbyBodies(
     position: Vector2,
     rigidBodies: RigidBody[],
@@ -85,7 +88,7 @@ export default class RigidBody extends GameObject {
     context.strokeStyle = "red";
     context.stroke();
   }
-  collideMass(a: RigidBody, b: RigidBody) {
+  protected collideMass(a: RigidBody, b: RigidBody) {
     const m1 = a.mass;
     const m2 = b.mass;
     const x = a.transform.x - b.transform.x;
@@ -155,7 +158,7 @@ export default class RigidBody extends GameObject {
       }
     }
   }
-  updateTransform(dt: number) {
+  protected updateTransform(dt: number) {
     this.vector.x += this.force.x;
     this.vector.y += this.force.y;
 
