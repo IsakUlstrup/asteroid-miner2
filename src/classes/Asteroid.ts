@@ -13,7 +13,8 @@ export default class Asteroid extends RigidBody {
       y: 0,
     };
     this.mass = 4;
-    this.minSpeed = 0.01;
+    this.minSpeed = 0;
+    this.collisionRadius = this.radius * 0.9;
   }
   public render() {
     const offScreenCanvas = document.createElement("canvas");
