@@ -68,12 +68,6 @@ export default class SpaceStation extends RigidBody {
     );
     context.fill();
 
-    // windows
-    context.beginPath();
-    context.fillStyle = "navy";
-    context.arc(50, 50, 10, 0, Math.PI * 2);
-    context.fill();
-
     return offScreenCanvas;
   }
 }

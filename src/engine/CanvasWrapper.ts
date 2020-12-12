@@ -21,10 +21,10 @@ export default class CanasWrapper {
 
   public setZoom(level: number) {
     this.cameraZoom += level * this.resolutionScale;
-    if (this.cameraZoom < 0.3 * window.devicePixelRatio)
-      this.cameraZoom = 0.3 * window.devicePixelRatio;
-    if (this.cameraZoom > 1.5 * window.devicePixelRatio)
-      this.cameraZoom = window.devicePixelRatio * 1.5;
+    if (this.cameraZoom < 0.1 * window.devicePixelRatio)
+      this.cameraZoom = 0.1 * window.devicePixelRatio;
+    if (this.cameraZoom > 1 * window.devicePixelRatio)
+      this.cameraZoom = window.devicePixelRatio * 1;
   }
   get size() {
     return {
