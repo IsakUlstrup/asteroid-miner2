@@ -4,8 +4,9 @@ import config from "../config";
 import { radianToPoint } from "../services/Utils";
 import RigidBody from "../engine/RigidBody";
 import ParticleEmitter from "../engine/ParticleEmitter";
+import DestroyableObject from "./DestroyableObject";
 
-export default class PlayerShip extends RigidBody {
+export default class PlayerShip extends DestroyableObject {
   accelerationModifier: number;
   engineParticleEmitter: ParticleEmitter;
   constructor(transform: Vector2) {

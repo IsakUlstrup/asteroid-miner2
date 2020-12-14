@@ -1,6 +1,7 @@
 import RigidBody from "../engine/RigidBody";
+import DestroyableObject from "./DestroyableObject";
 
-export default class SpaceStation extends RigidBody {
+export default class SpaceStation extends DestroyableObject {
   constructor(transform: Vector2) {
     super(transform, 256);
     this.mass = 100;

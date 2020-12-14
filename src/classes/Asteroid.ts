@@ -1,10 +1,9 @@
-// import GameObject from "./GameObject";
 import trianglify from "trianglify";
 import config from "../config";
 import { randomInt } from "../services/Utils";
-import RigidBody from "../engine/RigidBody";
+import DestroyableObject from "./DestroyableObject";
 
-export default class Asteroid extends RigidBody {
+export default class Asteroid extends DestroyableObject {
   constructor(transform: Vector2) {
     super(transform, 128);
     this.torque = (Math.random() - 0.5) * 0.0002;
