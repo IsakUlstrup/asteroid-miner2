@@ -3,7 +3,7 @@ import RigidBody from "../engine/RigidBody";
 export default class DestroyableObject extends RigidBody {
   maxHitPoints: number;
   hitPoints: number;
-  constructor(transform, size = 64) {
+  constructor(transform: Vector2, size = 64) {
     super(transform, size);
     this.maxHitPoints = 100;
     this.hitPoints = this.maxHitPoints;
