@@ -5,11 +5,9 @@ import type GameObject from "../engine/GameObject";
 
 export default class Engine extends Module {
   particleEmitter: ParticleEmitter;
-  active: boolean;
   constructor(offset: Vector2, parent: GameObject, effect = 1, size = 16) {
     super(offset, parent, effect, size);
     this.particleEmitter = new ParticleEmitter(this.transform);
-    this.active = false;
   }
 
   protected render() {
