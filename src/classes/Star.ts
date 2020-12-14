@@ -2,7 +2,7 @@ import GameObject from "../engine/GameObject";
 
 export default class Star extends GameObject {
   constructor(transform: Vector2) {
-    super(transform, 16);
+    super(transform, 12);
   }
 
   protected render() {
@@ -20,5 +20,13 @@ export default class Star extends GameObject {
   }
   update() {
     return;
+  }
+  public draw(context: CanvasRenderingContext2D) {
+    // draw buffer canvas
+    context.drawImage(
+      this.bufferCanvas,
+      Math.round(this.transform.x - this.radius),
+      Math.round(this.transform.y - this.radius)
+    );
   }
 }

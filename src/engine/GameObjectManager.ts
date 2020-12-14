@@ -18,7 +18,7 @@ export default class GameObjectManager {
 
   public update(dt: number) {
     this.updateObjects.forEach((object) =>
-      object.update(dt, this.canvas, this.gameObjects)
+      object.update(dt, this.canvas, this.updateObjects)
     );
   }
   public draw() {

@@ -51,12 +51,16 @@ export default class ShipPlayer extends Ship {
 
     if (canvas.cursor.active) {
       let engineEffect = 0;
+      const throttle = {
+        x: canvas.cursor.position.x / canvas.size.width - 0.5,
+        y: canvas.cursor.position.y / canvas.size.height - 0.5,
+      };
       this.engines.forEach((e) => {
         engineEffect += e.use();
       });
       const force = {
-        x: (canvas.cursor.position.x / canvas.size.width - 0.5) * engineEffect,
-        y: (canvas.cursor.position.y / canvas.size.height - 0.5) * engineEffect,
+        x: throttle.x * engineEffect,
+        y: throttle.y * engineEffect,
       };
 
       this.force.x = force.x / this.mass;
@@ -71,7 +75,7 @@ export default class ShipPlayer extends Ship {
       gameObjects.filter((go) => go instanceof RigidBody) as RigidBody[]
     );
     this.handleInput(canvas);
-    this.modules.forEach((m) => m.update(dt, canvas, gameObjects))
+    this.modules.forEach((m) => m.update(dt, canvas, gameObjects));
     this.updateTransform(dt);
   }
   public draw(context: CanvasRenderingContext2D) {
@@ -80,8 +84,8 @@ export default class ShipPlayer extends Ship {
 
     context.drawImage(
       this.bufferCanvas,
-      this.transform.x - this.size / 2,
-      this.transform.y - this.size / 2
+      this.transform.x - this.radius,
+      this.transform.y - this.radius
     );
     context.restore();
     if (config.debug) this.drawDebug(context);
