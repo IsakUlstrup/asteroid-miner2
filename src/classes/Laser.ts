@@ -15,9 +15,13 @@ export default class Laser extends Module {
     this.range = 500;
   }
 
+  get derivedRange() {
+    return this.range * this.powerModifier;
+  }
+
   private hitScan(objects: DestroyableObject[]) {
     let distance = 0;
-    for (distance; distance < this.range; distance += 5) {
+    for (distance; distance < this.derivedRange; distance += 5) {
       for (let index = 0; index < objects.length; index++) {
         const obj = objects[index];
         const hit = isWithinCircle(
@@ -47,7 +51,7 @@ export default class Laser extends Module {
       const nearby = this.getNearbyObjects(
         this.parent.transform,
         possibleTargets,
-        this.range * 1.2
+        this.derivedRange * 1.2
       ) as DestroyableObject[];
       this.hit = this.hitScan(nearby);
       this.active = true;
@@ -56,7 +60,7 @@ export default class Laser extends Module {
     }
   }
   public draw(context: CanvasRenderingContext2D) {
-    if (!this.active) return;
+    if (!this.active || this.derivedEffect <= 0) return;
 
     context.save();
     // context.translate(this.parent.transform.x, this.parent.transform.y);

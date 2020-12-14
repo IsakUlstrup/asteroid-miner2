@@ -4,10 +4,12 @@ import type CanvasWrapper from "../engine/CanvasWrapper";
 import type GameObject from "../engine/GameObject";
 
 export default class Engine extends Module {
-  particleEmitter: ParticleEmitter;
+  private particleEmitter: ParticleEmitter;
+  // private throttle: number;
   constructor(offset: Vector2, parent: GameObject, effect = 1, size = 16) {
     super(offset, parent, effect, size);
     this.particleEmitter = new ParticleEmitter(this.transform);
+    // this.throttle = 1;
   }
 
   protected render() {
@@ -34,11 +36,13 @@ export default class Engine extends Module {
         this.size * Math.sin(this.parent.rotation + Math.PI) + this.transform.y,
     };
 
-    this.particleEmitter.emit({
-      x: rotatedPosition.x,
-      y: rotatedPosition.y,
-    });
-    return this.effect;
+    if (this.derivedEffect > 0) {
+      this.particleEmitter.emit({
+        x: rotatedPosition.x,
+        y: rotatedPosition.y,
+      });
+    }
+    return this.derivedEffect;
   }
   public update(dt: number, canvas: CanvasWrapper, gameObjects: GameObject[]) {
     if (canvas.cursor.active) {

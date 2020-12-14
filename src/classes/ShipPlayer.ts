@@ -5,6 +5,7 @@ import { radianToPoint } from "../services/Utils";
 import RigidBody from "../engine/RigidBody";
 import Ship from "./Ship";
 import Engine from "./Engine";
+import Laser from "./Laser";
 
 export default class ShipPlayer extends Ship {
   accelerationModifier: number;
@@ -16,8 +17,11 @@ export default class ShipPlayer extends Ship {
     this.maxSpeed = 10;
   }
 
-  get engines() {
-    return this.modules.filter((m) => m instanceof Engine);
+  get engines(): Engine[] {
+    return this.modules.filter((m) => m instanceof Engine) as Engine[];
+  }
+  get lasers(): Laser[] {
+    return this.modules.filter((m) => m instanceof Laser) as Laser[];
   }
 
   protected render() {

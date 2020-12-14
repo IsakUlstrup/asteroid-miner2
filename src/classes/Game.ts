@@ -1,19 +1,15 @@
 import gameLoop from "../services/GameLoop";
 import GameObjectManager from "../engine/GameObjectManager";
-import ShipPlayer from "./ShipPlayer";
+import type ShipPlayer from "./ShipPlayer";
 import WorldGeneration from "./WordGeneration";
 import ShipStation from "./ShipStation";
-import Engine from "./Engine";
-import Laser from "./Laser";
 
 export default class Game {
   private renderer: GameObjectManager;
   private ship: ShipPlayer;
   private worldGen: WorldGeneration;
-  constructor(canvasQuery: string) {
-    this.ship = new ShipPlayer({ x: 0, y: 0 }, { r: 255, g: 255, b: 255 });
-    this.ship.addModule(new Engine({ x: -14, y: 0 }, this.ship, 0.07, 16));
-    this.ship.addModule(new Laser({ x: 0, y: 0 }, this.ship));
+  constructor(canvasQuery: string, ship: ShipPlayer) {
+    this.ship = ship;
 
     // setup & resize canvas
     const canvas = document.querySelector(canvasQuery) as HTMLCanvasElement;
