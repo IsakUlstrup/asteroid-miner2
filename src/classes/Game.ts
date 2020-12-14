@@ -12,7 +12,7 @@ export default class Game {
   private worldGen: WorldGeneration;
   constructor(canvasQuery: string) {
     this.ship = new ShipPlayer({ x: 0, y: 0 }, { r: 255, g: 255, b: 255 });
-    this.ship.addModule(new Engine({ x: -14, y: 0 }, this.ship, 0, 16));
+    this.ship.addModule(new Engine({ x: -14, y: 0 }, this.ship, 0.07, 16));
     this.ship.addModule(new Laser({ x: 0, y: 0 }, this.ship));
 
     // setup & resize canvas

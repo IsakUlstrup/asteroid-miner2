@@ -16,15 +16,10 @@ export default class Laser extends Module {
   }
 
   private hitScan(objects: DestroyableObject[]) {
-    const nearby = this.getNearbyObjects(
-      this.parent.transform,
-      objects,
-      this.range
-    ) as DestroyableObject[];
     let distance = 0;
-    for (distance; distance < this.range; distance += 1) {
-      for (let index = 0; index < nearby.length; index++) {
-        const obj = nearby[index];
+    for (distance; distance < this.range; distance += 5) {
+      for (let index = 0; index < objects.length; index++) {
+        const obj = objects[index];
         const hit = isWithinCircle(
           this.parent.transform.x + this.targetVector.x * distance,
           this.parent.transform.y + this.targetVector.y * distance,
@@ -32,15 +27,12 @@ export default class Laser extends Module {
           obj.transform.y,
           obj.radius
         );
+        this.hitDistance = distance;
         if (hit) {
-          // console.log("hit", distance);
-          this.hitDistance = distance;
           return obj;
         }
       }
     }
-    // console.log(distance);
-    this.hitDistance = distance;
     return undefined;
   }
   public update(dt: number, canvas: CanvasWrapper, gameObjects: GameObject[]) {
@@ -52,7 +44,12 @@ export default class Laser extends Module {
       const possibleTargets = gameObjects.filter(
         (o) => o instanceof DestroyableObject && o !== this.parent
       ) as DestroyableObject[];
-      this.hit = this.hitScan(possibleTargets);
+      const nearby = this.getNearbyObjects(
+        this.parent.transform,
+        possibleTargets,
+        this.range * 1.2
+      ) as DestroyableObject[];
+      this.hit = this.hitScan(nearby);
       this.active = true;
     } else {
       this.active = false;
