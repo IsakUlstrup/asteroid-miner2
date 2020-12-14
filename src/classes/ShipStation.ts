@@ -1,6 +1,6 @@
 import Ship from "./Ship";
 
-export default class SpaceStation extends Ship {
+export default class ShipStation extends Ship {
   constructor(transform: Vector2) {
     super(transform, 256);
     this.mass = 100;

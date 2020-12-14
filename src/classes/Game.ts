@@ -1,15 +1,15 @@
 import gameLoop from "../services/GameLoop";
 import GameObjectManager from "../engine/GameObjectManager";
-import PlayerShip from "./PlayerShip";
+import ShipPlayer from "./ShipPlayer";
 import WorldGeneration from "./WordGeneration";
-import SpaceStation from "./SpaceStation";
+import ShipStation from "./ShipStation";
 
 export default class Game {
   private renderer: GameObjectManager;
-  private ship: PlayerShip;
+  private ship: ShipPlayer;
   private worldGen: WorldGeneration;
   constructor(canvasQuery: string) {
-    this.ship = new PlayerShip({ x: 0, y: 0 });
+    this.ship = new ShipPlayer({ x: 0, y: 0 });
 
     // setup & resize canvas
     const canvas = document.querySelector(canvasQuery) as HTMLCanvasElement;
@@ -25,7 +25,7 @@ export default class Game {
   }
   public start() {
     this.renderer.addGameObject(this.worldGen);
-    this.renderer.addGameObject(new SpaceStation({ x: 200, y: 200 }));
+    this.renderer.addGameObject(new ShipStation({ x: 200, y: 200 }));
     this.renderer.addGameObject(this.ship);
 
     // start main loop

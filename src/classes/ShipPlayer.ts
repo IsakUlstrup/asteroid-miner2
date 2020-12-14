@@ -6,7 +6,7 @@ import RigidBody from "../engine/RigidBody";
 import ParticleEmitter from "../engine/ParticleEmitter";
 import Ship from "./Ship";
 
-export default class PlayerShip extends Ship {
+export default class ShipPlayer extends Ship {
   accelerationModifier: number;
   engineParticleEmitter: ParticleEmitter;
   constructor(transform: Vector2) {
