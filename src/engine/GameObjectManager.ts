@@ -42,7 +42,7 @@ export default class GameObjectManager {
     );
 
     // parallax objects
-    this.parallaxObjects.forEach((object) => {
+    this.onScreenParallaxObjects.forEach((object) => {
       object.draw(this.canvas.context);
     });
 

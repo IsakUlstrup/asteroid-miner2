@@ -19,13 +19,6 @@ export default class Asteroid extends DestroyableObject {
     const offScreenCanvas = document.createElement("canvas");
     offScreenCanvas.width = this.size;
     offScreenCanvas.height = this.size;
-    if (config.debug) {
-      const context = offScreenCanvas.getContext("2d");
-      context.beginPath();
-      context.arc(this.size / 2, this.size / 2, this.size / 2, 0, 2 * Math.PI);
-      context.strokeStyle = "rgb(50, 50, 50)";
-      context.stroke();
-    }
     const width = this.size;
     const height = this.size;
 
