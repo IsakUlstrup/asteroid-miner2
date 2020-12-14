@@ -51,7 +51,7 @@ export default class Laser extends Module {
       const nearby = this.getNearbyObjects(
         this.parent.transform,
         possibleTargets,
-        this.derivedRange * 1.2
+        this.range * 1.2
       ) as DestroyableObject[];
       this.hit = this.hitScan(nearby);
       this.active = true;
