@@ -3,6 +3,7 @@ import GameObjectManager from "../engine/GameObjectManager";
 import ShipPlayer from "./ShipPlayer";
 import WorldGeneration from "./WordGeneration";
 import ShipStation from "./ShipStation";
+import Engine from "./Engine";
 
 export default class Game {
   private renderer: GameObjectManager;
@@ -10,6 +11,7 @@ export default class Game {
   private worldGen: WorldGeneration;
   constructor(canvasQuery: string) {
     this.ship = new ShipPlayer({ x: 0, y: 0 });
+    this.ship.addModule(new Engine({ x: -14, y: 0 }, this.ship, 16));
 
     // setup & resize canvas
     const canvas = document.querySelector(canvasQuery) as HTMLCanvasElement;

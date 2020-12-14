@@ -3,17 +3,17 @@ import type CanvasWrapper from "../engine/CanvasWrapper";
 import config from "../config";
 import { radianToPoint } from "../services/Utils";
 import RigidBody from "../engine/RigidBody";
-import ParticleEmitter from "../engine/ParticleEmitter";
+// import ParticleEmitter from "../engine/ParticleEmitter";
 import Ship from "./Ship";
 
 export default class ShipPlayer extends Ship {
   accelerationModifier: number;
-  engineParticleEmitter: ParticleEmitter;
+  // engineParticleEmitter: ParticleEmitter;
   constructor(transform: Vector2) {
     super(transform, 32);
     this.accelerationModifier = 0.1;
     this.mass = 1;
-    this.engineParticleEmitter = new ParticleEmitter(this.transform);
+    // this.engineParticleEmitter = new ParticleEmitter(this.transform);
     this.minSpeed = 0.1;
     this.maxSpeed = 10;
   }
@@ -22,14 +22,13 @@ export default class ShipPlayer extends Ship {
     const offScreenCanvas = document.createElement("canvas");
     offScreenCanvas.width = this.size;
     offScreenCanvas.height = this.size;
+    const context = offScreenCanvas.getContext("2d");
     if (config.debug) {
-      const context = offScreenCanvas.getContext("2d");
       context.beginPath();
       context.arc(this.size / 2, this.size / 2, this.size / 2, 0, 2 * Math.PI);
       context.strokeStyle = "rgb(50, 50, 50)";
       context.stroke();
     }
-    const context = offScreenCanvas.getContext("2d");
     context.fillStyle = "rgb(255, 255, 255)";
     context.beginPath();
     context.moveTo(0, 0);
@@ -49,7 +48,6 @@ export default class ShipPlayer extends Ship {
     );
 
     if (canvas.cursor.active) {
-      this.engineParticleEmitter.emit();
       const force = {
         x:
           (canvas.cursor.position.x / canvas.size.width - 0.5) *
@@ -71,11 +69,11 @@ export default class ShipPlayer extends Ship {
       gameObjects.filter((go) => go instanceof RigidBody) as RigidBody[]
     );
     this.handleInput(canvas);
-    this.engineParticleEmitter.update(dt);
+    this.modules.forEach((m) => m.update(dt, canvas, gameObjects))
     this.updateTransform(dt);
   }
   public draw(context: CanvasRenderingContext2D) {
-    this.engineParticleEmitter.draw(context);
+    this.modules.forEach((m) => m.draw(context));
     this.rotateContext(context, this.rotation);
 
     context.drawImage(

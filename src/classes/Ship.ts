@@ -7,4 +7,8 @@ export default class Ship extends DestroyableObject {
     super(transform, size);
     this.modules = [];
   }
+
+  addModule(module: Module) {
+    this.modules.push(module);
+  }
 }
