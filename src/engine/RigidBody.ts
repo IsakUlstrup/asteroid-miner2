@@ -9,8 +9,12 @@ export default class RigidBody extends GameObject {
   minSpeed: number;
   maxSpeed: number;
   collisionRadius: number;
-  constructor(transform: Vector2, size: number) {
-    super(transform, size);
+  constructor(
+    transform: Vector2,
+    size: number,
+    color = { r: 255, g: 0, b: 0 }
+  ) {
+    super(transform, size, color);
     this.nearbyObjectsThreshold = 256;
     this.force = { x: 0, y: 0 };
     this.mass = 1;

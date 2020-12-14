@@ -1,6 +1,7 @@
 import type CanvasWrapper from "./CanvasWrapper";
 import { distanceBetweenPoints } from "../services/Utils";
 import config from "../config";
+import Color from "./Color";
 
 export default class GameObject {
   public transform: Vector2;
@@ -8,14 +9,16 @@ export default class GameObject {
   public rotation: number;
   public torque: number;
   public size: number;
+  public color: Color;
   protected bufferCanvas: HTMLCanvasElement;
-  constructor(transform: Vector2, size = 64) {
+  constructor(transform: Vector2, size = 64, color = { r: 255, g: 0, b: 0 }) {
     this.size = Math.round(size);
-    this.bufferCanvas = this.render();
     this.transform = transform;
     this.vector = { x: 0, y: 0 };
     this.rotation = 0;
     this.torque = 0;
+    this.color = new Color(color.r, color.g, color.b);
+    this.bufferCanvas = this.render();
   }
 
   // GETTERS
@@ -34,7 +37,7 @@ export default class GameObject {
     offScreenCanvas.width = this.size;
     offScreenCanvas.height = this.size;
     const context = offScreenCanvas.getContext("2d");
-    context.fillStyle = "white";
+    context.fillStyle = this.color.rgbString;
     context.fillRect(0, 0, this.size, this.size);
     return offScreenCanvas;
   }

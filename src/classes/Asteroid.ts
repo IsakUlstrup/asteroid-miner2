@@ -1,11 +1,10 @@
 import trianglify from "trianglify";
-import config from "../config";
 import { randomInt } from "../services/Utils";
 import DestroyableObject from "./DestroyableObject";
 
 export default class Asteroid extends DestroyableObject {
-  constructor(transform: Vector2) {
-    super(transform, 128);
+  constructor(transform: Vector2, color = { r: 255, g: 0, b: 0 }) {
+    super(transform, 128, color);
     this.torque = (Math.random() - 0.5) * 0.0002;
     this.vector = {
       x: 0,
@@ -19,6 +18,7 @@ export default class Asteroid extends DestroyableObject {
     const offScreenCanvas = document.createElement("canvas");
     offScreenCanvas.width = this.size;
     offScreenCanvas.height = this.size;
+    this.color.hsv(Math.random() * 360, 100, 100);
     const width = this.size;
     const height = this.size;
 
@@ -45,15 +45,10 @@ export default class Asteroid extends DestroyableObject {
       width,
       points,
       xColors: [
-        `rgb(${Math.round(Math.random() * 255)}, ${Math.round(
-          Math.random() * 255
-        )}, ${Math.round(Math.random() * 255)})`,
-        `rgb(${Math.round(Math.random() * 255)}, ${Math.round(
-          Math.random() * 255
-        )}, ${Math.round(Math.random() * 255)})`,
+        this.color.rgbString,
+        this.color.hueRotate(randomInt(50, 360)).rgbString,
       ],
-      yColors: "match",
-      colorFunction: trianglify.colorFunctions.shadows(0.1),
+      colorFunction: trianglify.colorFunctions.shadows(0.15),
     });
     return pattern.toCanvas(offScreenCanvas, { scaling: false });
   }

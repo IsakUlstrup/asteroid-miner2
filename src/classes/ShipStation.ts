@@ -1,8 +1,8 @@
 import Ship from "./Ship";
 
 export default class ShipStation extends Ship {
-  constructor(transform: Vector2) {
-    super(transform, 256);
+  constructor(transform: Vector2, color = { r: 255, g: 0, b: 0 }) {
+    super(transform, 256, color);
     this.mass = 100;
     this.torque = 0.0001;
   }
@@ -13,8 +13,8 @@ export default class ShipStation extends Ship {
     offScreenCanvas.height = this.size;
     const context = offScreenCanvas.getContext("2d");
 
-    context.fillStyle = "#eee";
-    context.strokeStyle = "white";
+    context.fillStyle = this.color.rgbString;
+    context.strokeStyle = this.color.darken(30).rgbString;
     context.lineWidth = 20;
 
     // cross beams
@@ -42,10 +42,10 @@ export default class ShipStation extends Ship {
       this.size / 2,
       this.size / 2
     );
-    gradient.addColorStop(0, "#bbb");
-    gradient.addColorStop(0.4, "#fafafa");
-    gradient.addColorStop(0.6, "#fafafa");
-    gradient.addColorStop(1, "#bbb");
+    gradient.addColorStop(0, this.color.darken(30).rgbString);
+    gradient.addColorStop(0.4, this.color.rgbString);
+    gradient.addColorStop(0.6, this.color.rgbString);
+    gradient.addColorStop(1, this.color.darken(30).rgbString);
 
     // main body/donut
     context.fillStyle = gradient;

@@ -23,10 +23,17 @@ export default class WorldGeneration extends GameObject {
   }
   addStar() {
     this.renderer.addParallaxObject(
-      new Star({
-        x: (Math.random() - 0.5) * 50000,
-        y: (Math.random() - 0.5) * 50000,
-      })
+      new Star(
+        {
+          x: (Math.random() - 0.5) * 50000,
+          y: (Math.random() - 0.5) * 50000,
+        },
+        {
+          r: 255,
+          g: 255,
+          b: 255,
+        }
+      )
     );
   }
   update(dt: number) {

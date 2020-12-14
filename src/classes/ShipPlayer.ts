@@ -8,8 +8,8 @@ import Engine from "./Engine";
 
 export default class ShipPlayer extends Ship {
   accelerationModifier: number;
-  constructor(transform: Vector2) {
-    super(transform, 32);
+  constructor(transform: Vector2, color = { r: 255, g: 0, b: 0 }) {
+    super(transform, 32, color);
     this.accelerationModifier = 0.1;
     this.mass = 1;
     this.minSpeed = 0.1;
@@ -31,7 +31,7 @@ export default class ShipPlayer extends Ship {
       context.strokeStyle = "rgb(50, 50, 50)";
       context.stroke();
     }
-    context.fillStyle = "rgb(255, 255, 255)";
+    context.fillStyle = this.color.rgbString;
     context.beginPath();
     context.moveTo(0, 0);
     context.lineTo(this.size, this.size / 2);

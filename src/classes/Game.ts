@@ -10,7 +10,7 @@ export default class Game {
   private ship: ShipPlayer;
   private worldGen: WorldGeneration;
   constructor(canvasQuery: string) {
-    this.ship = new ShipPlayer({ x: 0, y: 0 });
+    this.ship = new ShipPlayer({ x: 0, y: 0 }, { r: 255, g: 255, b: 255 });
     this.ship.addModule(new Engine({ x: -14, y: 0 }, this.ship, 0.1, 16));
 
     // setup & resize canvas
@@ -27,7 +27,9 @@ export default class Game {
   }
   public start() {
     this.renderer.addGameObject(this.worldGen);
-    this.renderer.addGameObject(new ShipStation({ x: 200, y: 200 }));
+    this.renderer.addGameObject(
+      new ShipStation({ x: 200, y: 200 }, { r: 255, g: 255, b: 255 })
+    );
     this.renderer.addGameObject(this.ship);
 
     // start main loop
