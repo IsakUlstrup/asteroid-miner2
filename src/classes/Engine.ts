@@ -6,8 +6,8 @@ import type GameObject from "../engine/GameObject";
 export default class Engine extends Module {
   particleEmitter: ParticleEmitter;
   active: boolean;
-  constructor(offset: Vector2, parent: GameObject, size = 16) {
-    super(offset, parent, size);
+  constructor(offset: Vector2, parent: GameObject, effect = 1, size = 16) {
+    super(offset, parent, effect, size);
     this.particleEmitter = new ParticleEmitter(this.transform);
     this.active = false;
   }
@@ -30,13 +30,17 @@ export default class Engine extends Module {
   }
   public use() {
     const rotatedPosition = {
-      x: this.size * Math.cos(this.parent.rotation + Math.PI) + this.transform.x,
-      y: this.size * Math.sin(this.parent.rotation + Math.PI) + this.transform.y,
-    }
+      x:
+        this.size * Math.cos(this.parent.rotation + Math.PI) + this.transform.x,
+      y:
+        this.size * Math.sin(this.parent.rotation + Math.PI) + this.transform.y,
+    };
+
     this.particleEmitter.emit({
       x: rotatedPosition.x,
       y: rotatedPosition.y,
     });
+    return this.effect;
   }
   public update(dt: number, canvas: CanvasWrapper, gameObjects: GameObject[]) {
     if (canvas.cursor.active) {

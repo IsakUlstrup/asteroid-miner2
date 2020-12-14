@@ -3,19 +3,21 @@ import type CanvasWrapper from "../engine/CanvasWrapper";
 import config from "../config";
 import { radianToPoint } from "../services/Utils";
 import RigidBody from "../engine/RigidBody";
-// import ParticleEmitter from "../engine/ParticleEmitter";
 import Ship from "./Ship";
+import Engine from "./Engine";
 
 export default class ShipPlayer extends Ship {
   accelerationModifier: number;
-  // engineParticleEmitter: ParticleEmitter;
   constructor(transform: Vector2) {
     super(transform, 32);
     this.accelerationModifier = 0.1;
     this.mass = 1;
-    // this.engineParticleEmitter = new ParticleEmitter(this.transform);
     this.minSpeed = 0.1;
     this.maxSpeed = 10;
+  }
+
+  get engines() {
+    return this.modules.filter((m) => m instanceof Engine);
   }
 
   protected render() {
@@ -48,13 +50,13 @@ export default class ShipPlayer extends Ship {
     );
 
     if (canvas.cursor.active) {
+      let engineEffect = 0;
+      this.engines.forEach((e) => {
+        engineEffect += e.use();
+      });
       const force = {
-        x:
-          (canvas.cursor.position.x / canvas.size.width - 0.5) *
-          this.accelerationModifier,
-        y:
-          (canvas.cursor.position.y / canvas.size.height - 0.5) *
-          this.accelerationModifier,
+        x: (canvas.cursor.position.x / canvas.size.width - 0.5) * engineEffect,
+        y: (canvas.cursor.position.y / canvas.size.height - 0.5) * engineEffect,
       };
 
       this.force.x = force.x / this.mass;
