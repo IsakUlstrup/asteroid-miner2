@@ -10,7 +10,6 @@ export default class GameObject {
   public torque: number;
   public size: number;
   public color: Color;
-  public garbageCollect: boolean;
   protected bufferCanvas: HTMLCanvasElement;
   constructor(transform: Vector2, size = 64, color = { r: 255, g: 0, b: 0 }) {
     this.size = Math.round(size);
@@ -20,7 +19,6 @@ export default class GameObject {
     this.torque = 0;
     this.color = new Color(color.r, color.g, color.b);
     this.bufferCanvas = this.render();
-    this.garbageCollect = false;
   }
 
   // GETTERS
@@ -39,8 +37,13 @@ export default class GameObject {
     offScreenCanvas.width = this.size;
     offScreenCanvas.height = this.size;
     const context = offScreenCanvas.getContext("2d");
+
     context.fillStyle = this.color.rgbString;
-    context.fillRect(0, 0, this.size, this.size);
+    context.lineWidth = 1;
+    context.beginPath();
+    context.arc(this.radius, this.radius, this.radius, 0, 2 * Math.PI);
+    context.fill();
+
     return offScreenCanvas;
   }
   public getNearbyObjects(

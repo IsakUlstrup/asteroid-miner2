@@ -1,6 +1,8 @@
 import trianglify from "trianglify";
+import type GameObject from "../engine/GameObject";
 import { randomInt } from "../services/Utils";
 import DestroyableObject from "./DestroyableObject";
+import Ore from "./Ore";
 
 export default class Asteroid extends DestroyableObject {
   constructor(transform: Vector2, color = { r: 255, g: 0, b: 0 }) {
@@ -13,7 +15,25 @@ export default class Asteroid extends DestroyableObject {
     this.mass = 4;
     this.minSpeed = 0;
     this.collisionRadius = this.radius * 0.9;
+
+    this.inventory.push(new Ore(this.transform, Ore.Type.cyan));
+    this.inventory.push(new Ore(this.transform, Ore.Type.magenta));
+    this.inventory.push(new Ore(this.transform, Ore.Type.yellow));
+    this.inventory.push(new Ore(this.transform, Ore.Type.black));
+    this.inventory.push(new Ore(this.transform, Ore.Type.white));
   }
+
+  public destroy(gameObjects: GameObject[]) {
+    this.inventory.forEach((i) => {
+      i.transform = {
+        x: i.transform.x + (Math.random() - 0.5) * this.size,
+        y: i.transform.y + (Math.random() - 0.5) * this.size,
+      };
+      gameObjects.push(i);
+    });
+    gameObjects.splice(gameObjects.indexOf(this), 1);
+  }
+
   public render() {
     const offScreenCanvas = document.createElement("canvas");
     offScreenCanvas.width = this.size;
