@@ -29,6 +29,7 @@ export default class Asteroid extends DestroyableObject {
         x: i.transform.x + (Math.random() - 0.5) * this.size,
         y: i.transform.y + (Math.random() - 0.5) * this.size,
       };
+      i.vector = this.vector;
       gameObjects.push(i);
     });
     gameObjects.splice(gameObjects.indexOf(this), 1);
