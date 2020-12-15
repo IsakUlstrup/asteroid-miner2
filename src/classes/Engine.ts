@@ -2,14 +2,13 @@ import Module from "./Module";
 import ParticleEmitter from "../engine/ParticleEmitter";
 import type CanvasWrapper from "../engine/CanvasWrapper";
 import type GameObject from "../engine/GameObject";
+import type Ship from "./Ship";
 
 export default class Engine extends Module {
   private particleEmitter: ParticleEmitter;
-  // private throttle: number;
-  constructor(offset: Vector2, parent: GameObject, effect = 1, size = 16) {
+  constructor(offset: Vector2, parent: Ship, effect = 1, size = 16) {
     super(offset, parent, effect, size);
     this.particleEmitter = new ParticleEmitter(this.transform);
-    // this.throttle = 1;
   }
 
   protected render() {

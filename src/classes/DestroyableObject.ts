@@ -1,4 +1,6 @@
 import RigidBody from "../engine/RigidBody";
+import type CanvasWrapper from "../engine/CanvasWrapper";
+import type GameObject from "../engine/GameObject";
 
 export default class DestroyableObject extends RigidBody {
   maxHitPoints: number;
@@ -11,5 +13,26 @@ export default class DestroyableObject extends RigidBody {
 
   get isAlive() {
     return this.hitPoints > 0;
+  }
+
+  public hit(damage: number, source: DestroyableObject) {
+    if (!this.isAlive) return;
+    this.hitPoints = this.hitPoints - damage > 0 ? this.hitPoints - damage : 0;
+    console.log("taking hit, current hp", this.hitPoints);
+  }
+  public destroy() {
+    this.garbageCollect = true;
+  }
+  public update(dt: number, canvas: CanvasWrapper, gameObjects: GameObject[]) {
+    if (!this.isAlive) {
+      this.destroy();
+      return;
+    }
+    if (this.isMoving)
+      this.handleCollision(
+        gameObjects.filter((go) => go instanceof RigidBody) as RigidBody[]
+      );
+    this.handleInput(canvas);
+    this.updateTransform(dt);
   }
 }

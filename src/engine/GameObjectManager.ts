@@ -17,9 +17,14 @@ export default class GameObjectManager {
   }
 
   public update(dt: number) {
-    this.updateObjects.forEach((object) =>
-      object.update(dt, this.canvas, this.updateObjects)
-    );
+    this.updateObjects.forEach((object) => {
+      if (object.garbageCollect) {
+        this.gameObjects = this.gameObjects.filter((o) => {
+          return o !== object;
+        });
+      }
+      object.update(dt, this.canvas, this.updateObjects);
+    });
   }
   public draw() {
     // reset context

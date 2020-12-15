@@ -3,13 +3,14 @@ import Module from "./Module";
 import type CanvasWrapper from "../engine/CanvasWrapper";
 import DestroyableObject from "./DestroyableObject";
 import { isWithinCircle } from "../services/Utils";
+import type Ship from "./Ship";
 
 export default class Laser extends Module {
   range: number;
   targetVector: Vector2;
   hitDistance: number;
   hit: DestroyableObject | undefined;
-  constructor(offset: Vector2, parent: GameObject) {
+  constructor(offset: Vector2, parent: Ship) {
     super(offset, parent, 1);
     this.color.rgb(255, 0, 0);
     this.range = 500;
@@ -20,6 +21,10 @@ export default class Laser extends Module {
   }
 
   private hitScan(objects: DestroyableObject[]) {
+    if (objects.length <= 0) {
+      this.hitDistance = this.derivedRange;
+      return;
+    }
     let distance = 0;
     for (distance; distance < this.derivedRange; distance += 5) {
       for (let index = 0; index < objects.length; index++) {
@@ -54,6 +59,9 @@ export default class Laser extends Module {
         this.range * 1.2
       ) as DestroyableObject[];
       this.hit = this.hitScan(nearby);
+      if (this.hit) {
+        this.hit.hit(1, this.parent);
+      }
       this.active = true;
     } else {
       this.active = false;
