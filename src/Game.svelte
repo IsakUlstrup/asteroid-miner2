@@ -47,7 +47,7 @@
     position: relative;
   }
   canvas {
-    background: url("https://www.toptal.com/designers/subtlepatterns/patterns/broken_noise.png");
+    background: #181818 url("https://www.toptal.com/designers/subtlepatterns/patterns/broken_noise.png");
   }
   .hud {
     position: absolute;
