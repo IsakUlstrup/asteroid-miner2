@@ -18,7 +18,7 @@ export default class DestroyableObject extends RigidBody {
   public hit(damage: number, source: DestroyableObject) {
     if (!this.isAlive) return;
     this.hitPoints = this.hitPoints - damage > 0 ? this.hitPoints - damage : 0;
-    console.log("taking hit, current hp", this.hitPoints);
+    // console.log("taking hit, current hp", this.hitPoints);
   }
   public destroy() {
     this.garbageCollect = true;
