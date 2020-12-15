@@ -2,10 +2,11 @@ import type GameObject from "../engine/GameObject";
 import type CanvasWrapper from "../engine/CanvasWrapper";
 import config from "../config";
 import { radianToPoint } from "../services/Utils";
-import RigidBody from "../engine/RigidBody";
+import type RigidBody from "../engine/RigidBody";
 import Ship from "./Ship";
 import Engine from "./Engine";
 import Laser from "./Laser";
+import Ore from "./Ore";
 
 export default class ShipPlayer extends Ship {
   accelerationModifier: number;
@@ -45,6 +46,13 @@ export default class ShipPlayer extends Ship {
     context.fill();
     return offScreenCanvas;
   }
+  collisionInteraction(target: RigidBody) {
+    if (target instanceof Ore) {
+      // pickup ore
+      this.inventory.push(target);
+      console.log("inv", this.inventory.length);
+    }
+  }
   handleInput(canvas: CanvasWrapper) {
     this.rotation = radianToPoint(
       canvas.size.width / 2,
@@ -73,14 +81,6 @@ export default class ShipPlayer extends Ship {
       this.force.x = 0;
       this.force.y = 0;
     }
-  }
-  public update(dt: number, canvas: CanvasWrapper, gameObjects: GameObject[]) {
-    this.handleCollision(
-      gameObjects.filter((go) => go instanceof RigidBody) as RigidBody[]
-    );
-    this.handleInput(canvas);
-    this.modules.forEach((m) => m.update(dt, canvas, gameObjects));
-    this.updateTransform(dt);
   }
   public draw(context: CanvasRenderingContext2D) {
     this.modules.forEach((m) => m.draw(context));

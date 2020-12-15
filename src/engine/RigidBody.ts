@@ -92,6 +92,9 @@ export default class RigidBody extends GameObject {
     context.strokeStyle = "red";
     context.stroke();
   }
+  protected collisionInteraction(target: RigidBody) {
+    return;
+  }
   protected collideMass(a: RigidBody, b: RigidBody) {
     const m1 = a.mass;
     const m2 = b.mass;
@@ -135,6 +138,9 @@ export default class RigidBody extends GameObject {
     const newY = a.transform.y - b.transform.y;
     // const newd = Math.pow(newX, 2) + Math.pow(newY, 2);
     const dist = Math.sqrt(Math.pow(newX, 2) + Math.pow(newY, 2));
+
+    a.collisionInteraction(b);
+    b.collisionInteraction(a);
 
     if (dist < a.radius + b.radius) {
       console.log("invalid collision!");
