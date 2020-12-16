@@ -8,13 +8,13 @@ export default class ParticleEmitter extends GameObject {
     this.particles = [];
   }
 
-  public emit(transform = this.transform, vector: Vector2 = { x: 0, y: 0 }) {
+  public emit(
+    transform = this.transform,
+    vector: Vector2 = { x: 0, y: 0 },
+    color = this.color.rgbObject
+  ) {
     this.particles.push(
-      new Particle(
-        { x: transform.x, y: transform.y },
-        vector,
-        this.color.rgbObject
-      )
+      new Particle({ x: transform.x, y: transform.y }, vector, color)
     );
   }
   public update(dt: number) {

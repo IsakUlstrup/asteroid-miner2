@@ -4,16 +4,22 @@ import type CanvasWrapper from "../engine/CanvasWrapper";
 import DestroyableObject from "./DestroyableObject";
 import { isWithinCircle } from "../services/Utils";
 import type Ship from "./Ship";
+import ParticleEmitter from "../engine/ParticleEmitter";
 
 export default class Laser extends Module {
   range: number;
   targetVector: Vector2;
   hitDistance: number;
   hit: DestroyableObject | undefined;
+  particleEmitter: ParticleEmitter;
   constructor(offset: Vector2, parent: Ship) {
     super(offset, parent, 1);
     this.color.rgb(255, 0, 0);
     this.range = 500;
+    this.particleEmitter = new ParticleEmitter(
+      this.transform,
+      this.color.rgbObject
+    );
   }
 
   get derivedRange() {
@@ -45,6 +51,7 @@ export default class Laser extends Module {
     return undefined;
   }
   public update(dt: number, canvas: CanvasWrapper, gameObjects: GameObject[]) {
+    this.particleEmitter.update(dt);
     if (canvas.cursor.active) {
       this.targetVector = {
         x: Math.cos(this.parent.rotation),
@@ -61,6 +68,17 @@ export default class Laser extends Module {
       this.hit = this.hitScan(nearby);
       if (this.hit) {
         this.hit.hit(1, this.parent);
+        this.particleEmitter.emit(
+          {
+            x: this.parent.transform.x + this.targetVector.x * this.hitDistance,
+            y: this.parent.transform.y + this.targetVector.y * this.hitDistance,
+          },
+          {
+            x: (Math.random() - 0.5) * 0.3,
+            y: (Math.random() - 0.5) * 0.3,
+          },
+          this.hit.color.rgbObject
+        );
       }
       this.active = true;
     } else {
@@ -68,6 +86,7 @@ export default class Laser extends Module {
     }
   }
   public draw(context: CanvasRenderingContext2D) {
+    this.particleEmitter.draw(context);
     if (!this.active || this.derivedEffect <= 0) return;
 
     context.save();
