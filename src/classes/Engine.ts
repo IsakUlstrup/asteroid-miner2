@@ -8,7 +8,11 @@ export default class Engine extends Module {
   private particleEmitter: ParticleEmitter;
   constructor(offset: Vector2, parent: Ship, effect = 1, size = 16) {
     super(offset, parent, effect, size);
-    this.particleEmitter = new ParticleEmitter(this.transform);
+    this.particleEmitter = new ParticleEmitter(this.transform, {
+      r: 255,
+      g: 255,
+      b: 255,
+    });
   }
 
   protected render() {

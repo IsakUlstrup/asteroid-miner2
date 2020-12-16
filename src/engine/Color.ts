@@ -63,6 +63,13 @@ export default class Color {
   }
 
   // getters
+  get rgbObject() {
+    return {
+      r: this.state.r,
+      g: this.state.g,
+      b: this.state.b,
+    };
+  }
   get rgbString() {
     return `rgb(${Math.round(this.state.r)}, ${Math.round(
       this.state.g
