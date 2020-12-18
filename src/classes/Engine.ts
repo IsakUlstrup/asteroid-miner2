@@ -63,7 +63,7 @@ export default class Engine extends Module {
     context.translate(this.transform.x, this.transform.y);
     context.rotate(this.parent.rotation);
     context.translate(-this.transform.x, -this.transform.y);
-    if (this.active) {
+    if (this.active && this.powerModifier > 0) {
       context.drawImage(
         this.bufferCanvas,
         this.transform.x + this.positionOffset.x - this.size / 2,
